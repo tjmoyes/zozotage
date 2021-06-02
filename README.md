@@ -19,6 +19,6 @@ A Lisp-like compiler that allows users to code in French
 	- Must have:
 		+ Blank file with no chars
 		+ Hello world
-		+ A program that does anyting
+		+ A program that does anything
 		+ A huge file that's a lot of characters long, almost as large as language's MAX_INT
     		+ e.g. printing a very long string

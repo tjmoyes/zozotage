@@ -2,14 +2,16 @@
 * Version: 1.20.1
 * Authors: Jon Liu 040967432, Tyson Moyes 040761903
 * Date: Jun 5, 2021
-
+*
 * Preprocessor directives, type declarations and prototypes necessary for buffer
 implementation
 * as required for CST8152-Assignment #1.
 * TODO:
 * The file is not completed.
 * You must add your function declarations (prototypes).
-* You must also add your constant definitions and macros,if any.
+*
+* History:
+*	* Jon Liu adapted the provided header file to Zozotage
 */
 
 #ifndef BUFFER_H_
@@ -39,25 +41,16 @@ enum BUFFERMODES { MODE_FIXED = 'F', MODE_ADDIT = 'A', MODE_MULTI = 'M' };
 /* You should add your own constant definitions here */
 #define ZZ_MAX_SIZE SHRT_MAX - 1 /*maximum capacity*/
 
-/* Add your bit-masks constant definitions here - Defined for SOFIA */
-#define SOFIA_DEFAULT_FLAG 0xFC /* 1111.1100 */
-#define SOFIA_SET_FLAG_RLC 0x02 /* 0000.0010 */
-#define SOFIA_RST_FLAG_RLC 0xFD /* 1111.1101 */
-#define SOFIA_CHK_FLAG_RLC 0x02 /* 0000.0010 */
-#define SOFIA_SET_FLAG_EOB 0x01 /* 0000.0001 */
-#define SOFIA_RST_FLAG_EOB 0xFE /* 1111.1110 */
-#define SOFIA_CHK_FLAG_EOB 0x01 /* 0000.0001 */
-
-/* TODO: Adjust to operate with MSB */
-/*
-#define YOURLANG_DEFAULT_FLAG		TO_DEFINE
-#define YOURLANG_SET_FLAG_RLC		TO_DEFINE
-#define YOURLANG_RST_FLAG_RLC		TO_DEFINE
-#define YOURLANG_CHK_FLAG_RLC		TO_DEFINE
-#define YOURLANG_SET_FLAG_EOB		TO_DEFINE
-#define YOURLANG_RST_FLAG_EOB		TO_DEFINE
-#define YOURLANG_CHK_FLAG_EOB		TO_DEFINE
-*/
+/* Bit masks */
+#define ZZ_DEFAULT_FLAG 0x3F /* 0011 1111 */
+/* Realloced buffer */
+#define ZZ_SET_FLAG_RLB 0x80 /* 1000 0000 */
+#define ZZ_RST_FLAG_RLB 0x7F /* 0111 1111 */
+#define ZZ_CHK_FLAG_RLB 0x80 /* 1000 0000 */
+/* End of buffer */
+#define ZZ_SET_FLAG_EOB 0x40 /* 0100 0000 */
+#define ZZ_RST_FLAG_EOB 0xBF /* 1011 1111 */
+#define ZZ_CHK_FLAG_EOB 0x40 /* 0100 0000 */
 
 /* Logical constants - adapt for your language */
 #define ZZ_TRUE 1
@@ -81,10 +74,8 @@ typedef struct ZzOffset {
 
 /* user data type declarations */
 typedef struct ZzBuffer {
-  zz_char* string; /* pointer to the beginning of character array (character
-                      buffer) */
-  zz_int size; /* current dynamic memory size (in bytes) allocated to character
-                  buffer */
+  zz_char* string;  /* pointer to the start of char array (char buffer) */
+  zz_int size;      /* current byte size allocated to char buffer */
   zz_int increment; /* character array increment factor */
   zz_int mode;      /* operational mode indicator*/
   zz_flags flags;   /* contains character array reallocation flag and
