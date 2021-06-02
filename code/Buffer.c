@@ -36,16 +36,16 @@
 *   mode = operational mode
 * Return value: bPointer (pointer to Buffer)
 * Algorithm: Allocation of memory according to inicial (default) values.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
-BufferPointer bufferCreate(sofia_int size, sofia_int increment, sofia_int mode) {
+BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode) {
 	BufferPointer b;
-	if (size<0 || size>SOFIA_MAX_SIZE)
+	if (size<0 || size>ZZ_MAX_SIZE)
 		return NULL;
 	if (!size) {
-		size = SOFIA_DEFAULT_SIZE;
-		increment = SOFIA_DEFAULT_INCREMENT;
+		size = ZZ_DEFAULT_SIZE;
+		increment = ZZ_DEFAULT_INCREMENT;
 	}
 	if (!increment)
 		mode = MODE_FIXED;
@@ -72,18 +72,18 @@ BufferPointer bufferCreate(sofia_int size, sofia_int increment, sofia_int mode) 
 *   pBuffer = pointer to Buffer Entity
 *   ch = char to be added
 * Return value: bPointer (pointer to Buffer)
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
-BufferPointer bufferAddChar(BufferPointer const pBuffer, sofia_chr ch) {
-	sofia_chr* tempbuf;
-	sofia_int newSize;
+BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch) {
+	zz_char* tempbuf;
+	zz_int newSize;
 	if (!pBuffer)
 		return NULL;
 	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_RLC;
-	if (pBuffer->offset.addC * sizeof(sofia_chr) == SOFIA_MAX_SIZE)
+	if (pBuffer->offset.addC * sizeof(zz_char) == ZZ_MAX_SIZE)
 		return NULL;
-	if (bufferCheckFull(pBuffer) == SOFIA_TRUE) {
+	if (bufferCheckFull(pBuffer) == ZZ_TRUE) {
 		switch (pBuffer->mode) {
 		case MODE_FIXED:
 			return NULL;
@@ -125,15 +125,15 @@ BufferPointer bufferAddChar(BufferPointer const pBuffer, sofia_chr ch) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferClean(BufferPointer const pBuffer) {
+zz_bool bufferClean(BufferPointer const pBuffer) {
 	if (!pBuffer)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	pBuffer->offset.addC = pBuffer->offset.mark = pBuffer->offset.getC = 0;
 	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_EOB;
 	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_RLC;
-	return SOFIA_TRUE;
+	return ZZ_TRUE;
 }
 
 /************************************************************
@@ -142,14 +142,14 @@ sofia_bol bufferClean(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferDestroy(BufferPointer const pBuffer) {
+zz_bool bufferDestroy(BufferPointer const pBuffer) {
 	if (!pBuffer)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	free(pBuffer->string);
 	free(pBuffer);
-	return SOFIA_TRUE;
+	return ZZ_TRUE;
 }
 
 /************************************************************
@@ -158,14 +158,14 @@ sofia_bol bufferDestroy(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferCheckFull(BufferPointer const pBuffer) {
+zz_bool bufferCheckFull(BufferPointer const pBuffer) {
 	if (!pBuffer)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	if (pBuffer->size == pBuffer->offset.addC * (int)sizeof(char))
-		return SOFIA_TRUE;
-	return SOFIA_FALSE;
+		return ZZ_TRUE;
+	return ZZ_FALSE;
 }
 
 /************************************************************
@@ -174,9 +174,9 @@ sofia_bol bufferCheckFull(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: addcPosition value
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferGetOffsetAddC(BufferPointer const pBuffer) {
+zz_int bufferGetOffsetAddC(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->offset.addC;
@@ -188,9 +188,9 @@ sofia_int bufferGetOffsetAddC(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Size of buffer.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferGetSize(BufferPointer const pBuffer) {
+zz_int bufferGetSize(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->size;
@@ -202,9 +202,9 @@ sofia_int bufferGetSize(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: operational mode.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferGetMode(BufferPointer const pBuffer) {
+zz_int bufferGetMode(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return (char)BUFFER_ERROR;
 	return pBuffer->mode;
@@ -217,10 +217,10 @@ sofia_int bufferGetMode(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: mark offset.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
-sofia_int bufferGetOffsetMark(BufferPointer const pBuffer) {
+zz_int bufferGetOffsetMark(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->offset.mark;
@@ -234,13 +234,13 @@ sofia_int bufferGetOffsetMark(BufferPointer const pBuffer) {
 *   pBuffer = pointer to Buffer Entity
 *   mark = mark position for char
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferSetOffsetMark(BufferPointer const pBuffer, sofia_int mark) {
+zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark) {
 	if (!pBuffer || mark<0 || mark > pBuffer->offset.addC)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	pBuffer->offset.mark = mark;
-	return SOFIA_TRUE;
+	return ZZ_TRUE;
 }
 
 /************************************************************
@@ -249,10 +249,10 @@ sofia_bol bufferSetOffsetMark(BufferPointer const pBuffer, sofia_int mark) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Number of chars printed.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferPrint(BufferPointer const pBuffer) {
-	sofia_int cont = 0;
+zz_int bufferPrint(BufferPointer const pBuffer) {
+	zz_int cont = 0;
 	char c;
 	if (!pBuffer || !(pBuffer->string))
 		return BUFFER_ERROR;
@@ -273,10 +273,10 @@ sofia_int bufferPrint(BufferPointer const pBuffer) {
 *   pBuffer = pointer to Buffer Entity
 *   fi = pointer to file descriptor
 * Return value: Number of chars read and put in buffer.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferLoad(BufferPointer const pBuffer, FILE* const fi) {
-	sofia_int size = 0;
+zz_int bufferLoad(BufferPointer const pBuffer, FILE* const fi) {
+	zz_int size = 0;
 	char c;
 	if (!fi || !pBuffer)
 		return BUFFER_ERROR;
@@ -300,14 +300,14 @@ sofia_int bufferLoad(BufferPointer const pBuffer, FILE* const fi) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferCheckEmpty(BufferPointer const pBuffer) {
+zz_bool bufferCheckEmpty(BufferPointer const pBuffer) {
 	if (!pBuffer)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	if (pBuffer->offset.addC == 0)
-		return SOFIA_TRUE;
-	return SOFIA_FALSE;
+		return ZZ_TRUE;
+	return ZZ_FALSE;
 }
 
 /************************************************************
@@ -316,9 +316,9 @@ sofia_bol bufferCheckEmpty(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Char in the getC position.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_chr bufferGetChar(BufferPointer const pBuffer) {
+zz_char bufferGetChar(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	if (pBuffer->offset.getC == pBuffer->offset.addC) {
@@ -336,14 +336,14 @@ sofia_chr bufferGetChar(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferRewind(BufferPointer const pBuffer) {
+zz_bool bufferRewind(BufferPointer const pBuffer) {
 	if (!pBuffer)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	pBuffer->offset.getC = 0;
 	pBuffer->offset.mark = 0;
-	return SOFIA_TRUE;
+	return ZZ_TRUE;
 }
 
 
@@ -353,13 +353,13 @@ sofia_bol bufferRewind(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferRetract(BufferPointer const pBuffer) {
+zz_bool bufferRetract(BufferPointer const pBuffer) {
 	if (!pBuffer || pBuffer->offset.getC == 0)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	pBuffer->offset.getC--;
-	return SOFIA_TRUE;
+	return ZZ_TRUE;
 }
 
 
@@ -369,13 +369,13 @@ sofia_bol bufferRetract(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_bol bufferRestore(BufferPointer const pBuffer) {
+zz_bool bufferRestore(BufferPointer const pBuffer) {
 	if (!pBuffer)
-		return SOFIA_FALSE;
+		return ZZ_FALSE;
 	pBuffer->offset.getC = pBuffer->offset.mark;
-	return SOFIA_TRUE;
+	return ZZ_TRUE;
 }
 
 
@@ -385,9 +385,9 @@ sofia_bol bufferRestore(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: The getC offset.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferGetOffsetGetC(BufferPointer const pBuffer) {
+zz_int bufferGetOffsetGetC(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->offset.getC;
@@ -400,9 +400,9 @@ sofia_int bufferGetOffsetGetC(BufferPointer const pBuffer) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: The Buffer increment.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_int bufferGetIncrement(BufferPointer const pBuffer) {
+zz_int bufferGetIncrement(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->increment;
@@ -416,9 +416,9 @@ sofia_int bufferGetIncrement(BufferPointer const pBuffer) {
 *   pBuffer = pointer to Buffer Entity
 *   pos = position to get the pointer
 * Return value: Position of string char.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
-sofia_chr* bufferGetSubString(BufferPointer const pBuffer, sofia_int pos) {
+zz_char* bufferGetSubString(BufferPointer const pBuffer, zz_int pos) {
 	if (!pBuffer || pos < 0 || pos > pBuffer->offset.addC)
 		return NULL;
 	return pBuffer->string + pos;
@@ -431,12 +431,12 @@ sofia_chr* bufferGetSubString(BufferPointer const pBuffer, sofia_int pos) {
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Flags from Buffer.
-* TO_DO: Adjust for your LANGUAGE.
+* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 #define FLAGS_
 #undef FLAGS_
 #ifndef FLAGS_
-sofia_flg bufferGetFlags(BufferPointer const pBuffer) {
+zz_flags bufferGetFlags(BufferPointer const pBuffer) {
 	if (!pBuffer)
 		return (unsigned char)BUFFER_ERROR;
 	return pBuffer->flags;
