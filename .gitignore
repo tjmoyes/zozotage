@@ -54,3 +54,6 @@ dkms.conf
 # input junk
 *.err
 *.out
+
+# our executable
+zz_compiler
