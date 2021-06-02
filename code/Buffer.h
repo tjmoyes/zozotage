@@ -1,14 +1,15 @@
 /** File Name: Buffer.h
 * Version: 1.20.1
+* Compiler: GCC 9.3, Clang 11
 * Authors: Jon Liu 040967432, Tyson Moyes 040761903
+* Course: CST 8152 - Compilers, Lab Section: 013
+* Assignment: A12
 * Date: Jun 5, 2021
-*
+* Professor: Paulo Sousa
+* 
 * Preprocessor directives, type declarations and prototypes necessary for buffer
 implementation
 * as required for CST8152-Assignment #1.
-* TODO:
-* The file is not completed.
-* You must add your function declarations (prototypes).
 *
 * History:
 *	* Jon Liu adapted the provided header file to Zozotage

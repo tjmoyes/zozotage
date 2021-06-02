@@ -7,12 +7,33 @@
  * File name: Buffer.c
  * Compiler: GCC 9.3, Clang 11
  * Authors: Jon Liu 040967432, Tyson Moyes 040761903
- * Course: CST 8152 � Compilers, Lab Section: [011, 012, 013, 014]
+ * Course: CST 8152 - Compilers, Lab Section: 013
  * Assignment: A12
  * Date: Jun 5, 2021
  * Professor: Paulo Sousa
  * Purpose: This file is the main code for Buffer (A1)
- * Function list: (...). TODO:
+ * Function list:
+ *  - bufferCreate
+ *  - bufferAddChar
+ *  - bufferClean
+ *  - bufferDestroy
+ *  - bufferCheckFull
+ *  - bufferGetOffsetAddC
+ *  - bufferGetSize
+ *  - bufferGetMode
+ *  - bufferGetOffsetMark
+ *  - bufferSetOffsetMark
+ *  - bufferPrint
+ *  - bufferLoad
+ *  - bufferCheckEmpty
+ *  - bufferGetChar
+ *  - bufferRewind
+ *  - bufferRetract
+ *  - bufferRestore
+ *  - bufferGetOffsetGetC
+ *  - bufferGetIncrement
+ *  - bufferGetString
+ *  - bufferGetFlags
  *************************************************************/
 
 #ifndef COMPILERS_H_
@@ -36,7 +57,6 @@
 *   mode = operational mode
 * Return value: bPointer (pointer to Buffer)
 * Algorithm: Allocation of memory according to inicial (default) values.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
 BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode)
@@ -74,7 +94,6 @@ BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode)
 *   pBuffer = pointer to Buffer Entity
 *   ch = char to be added
 * Return value: bPointer (pointer to Buffer)
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
 BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch)
@@ -131,7 +150,6 @@ BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferClean(BufferPointer const pBuffer)
 {
@@ -149,7 +167,6 @@ zz_bool bufferClean(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferDestroy(BufferPointer const pBuffer)
 {
@@ -166,7 +183,6 @@ zz_bool bufferDestroy(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferCheckFull(BufferPointer const pBuffer)
 {
@@ -183,7 +199,6 @@ zz_bool bufferCheckFull(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: addcPosition value
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferGetOffsetAddC(BufferPointer const pBuffer)
 {
@@ -198,7 +213,6 @@ zz_int bufferGetOffsetAddC(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Size of buffer.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferGetSize(BufferPointer const pBuffer)
 {
@@ -213,7 +227,6 @@ zz_int bufferGetSize(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: operational mode.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferGetMode(BufferPointer const pBuffer)
 {
@@ -228,7 +241,6 @@ zz_int bufferGetMode(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: mark offset.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
 zz_int bufferGetOffsetMark(BufferPointer const pBuffer)
@@ -245,7 +257,6 @@ zz_int bufferGetOffsetMark(BufferPointer const pBuffer)
 *   pBuffer = pointer to Buffer Entity
 *   mark = mark position for char
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark)
 {
@@ -261,7 +272,6 @@ zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Number of chars printed.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferPrint(BufferPointer const pBuffer)
 {
@@ -287,7 +297,6 @@ zz_int bufferPrint(BufferPointer const pBuffer)
 *   pBuffer = pointer to Buffer Entity
 *   fi = pointer to file descriptor
 * Return value: Number of chars read and put in buffer.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferLoad(BufferPointer const pBuffer, FILE *const fi)
 {
@@ -317,7 +326,6 @@ zz_int bufferLoad(BufferPointer const pBuffer, FILE *const fi)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferCheckEmpty(BufferPointer const pBuffer)
 {
@@ -334,7 +342,6 @@ zz_bool bufferCheckEmpty(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Char in the getC position.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_char bufferGetChar(BufferPointer const pBuffer)
 {
@@ -355,7 +362,6 @@ zz_char bufferGetChar(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferRewind(BufferPointer const pBuffer)
 {
@@ -372,7 +378,6 @@ zz_bool bufferRewind(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferRetract(BufferPointer const pBuffer)
 {
@@ -388,7 +393,6 @@ zz_bool bufferRetract(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Boolean value about operation success
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_bool bufferRestore(BufferPointer const pBuffer)
 {
@@ -399,12 +403,11 @@ zz_bool bufferRestore(BufferPointer const pBuffer)
 }
 
 /************************************************************
-* Function name: bufferGetCPosition
+* Function name: bufferGetOffsetGetC
 * Purpose: Returns the value of getCPosition.
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: The getC offset.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferGetOffsetGetC(BufferPointer const pBuffer)
 {
@@ -419,7 +422,6 @@ zz_int bufferGetOffsetGetC(BufferPointer const pBuffer)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: The Buffer increment.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_int bufferGetIncrement(BufferPointer const pBuffer)
 {
@@ -435,7 +437,6 @@ zz_int bufferGetIncrement(BufferPointer const pBuffer)
 *   pBuffer = pointer to Buffer Entity
 *   pos = position to get the pointer
 * Return value: Position of string char.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 zz_char *bufferGetSubString(BufferPointer const pBuffer, zz_int pos)
 {
@@ -450,7 +451,6 @@ zz_char *bufferGetSubString(BufferPointer const pBuffer, zz_int pos)
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
 * Return value: Flags from Buffer.
-* TODO: Adjust for your LANGUAGE.
 **************************************************************/
 #define FLAGS_
 #undef FLAGS_
