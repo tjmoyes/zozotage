@@ -26,7 +26,12 @@ implementation
  */
 
 /* Modes (used to create buffer) */
-enum BUFFERMODES { MODE_FIXED = 'F', MODE_ADDIT = 'A', MODE_MULTI = 'M' };
+enum BUFFERMODES
+{
+  MODE_FIXED = 'F',
+  MODE_ADDIT = 'A',
+  MODE_MULTI = 'M'
+};
 
 #define BUFFER_ERROR (-1) /* General error message */
 #define BUFFER_EOF '\0'   /* General EOF */
@@ -39,7 +44,7 @@ enum BUFFERMODES { MODE_FIXED = 'F', MODE_ADDIT = 'A', MODE_MULTI = 'M' };
 #define ZZ_DEFAULT_INCREMENT 10 /* default increment factor */
 
 /* You should add your own constant definitions here */
-#define ZZ_MAX_SIZE SHRT_MAX - 1 /*maximum capacity*/
+#define ZZ_MAX_SIZE INT_MAX - 1 /*maximum capacity*/
 
 /* Bit masks */
 #define ZZ_DEFAULT_FLAG 0x3F /* 0011 1111 */
@@ -66,15 +71,17 @@ typedef unsigned char zz_flags;
 typedef char zz_bool;
 
 /* user data type declarations */
-typedef struct ZzOffset {
+typedef struct ZzOffset
+{
   zz_int addC; /* the offset (in chars) to the add-character location */
   zz_int getC; /* the offset (in chars) to the get-character location */
   zz_int mark; /* the offset (in chars) to the mark location */
 } Offset;
 
 /* user data type declarations */
-typedef struct ZzBuffer {
-  zz_char* string;  /* pointer to the start of char array (char buffer) */
+typedef struct ZzBuffer
+{
+  zz_char *string;  /* pointer to the start of char array (char buffer) */
   zz_int size;      /* current byte size allocated to char buffer */
   zz_int increment; /* character array increment factor */
   zz_int mode;      /* operational mode indicator*/
@@ -97,7 +104,7 @@ zz_bool bufferDestroy(BufferPointer const);
 
 zz_bool bufferSetOffsetMark(BufferPointer const, zz_int);
 zz_int bufferPrint(BufferPointer const);
-zz_int bufferLoad(BufferPointer const, FILE* const);
+zz_int bufferLoad(BufferPointer const, FILE *const);
 
 zz_bool bufferCheckFull(BufferPointer const);
 zz_bool bufferCheckEmpty(BufferPointer const);
@@ -109,7 +116,7 @@ zz_int bufferGetOffsetGetC(BufferPointer const);
 zz_int bufferGetIncrement(BufferPointer const);
 zz_int bufferGetMode(BufferPointer const);
 zz_char bufferGetChar(BufferPointer const);
-zz_char* bufferGetSubString(BufferPointer const, zz_int);
+zz_char *bufferGetSubString(BufferPointer const, zz_int);
 zz_flags bufferGetFlags(BufferPointer const);
 
 #endif
