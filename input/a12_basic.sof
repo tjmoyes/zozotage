@@ -1,0 +1,20 @@
+@ SOFIA Example
+  The program is "lexically" correct
+  and should not generate any error @
+MAIN {
+    DATA {
+        INT #i, #n, #f;
+    }
+    CODE {
+        #f=1;
+        #i=1;
+        WRITE("Digite um numero:");
+        READ(#n);
+        WHILE (#i<#n) DO {
+            #f = #f*#i;
+            #i = #i+1;
+        };
+        WRITE("Fatorial:");
+        WRITE(#f);
+    }
+}
