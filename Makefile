@@ -8,7 +8,7 @@ CFLAGS = -g -Wall -Wextra -ansi -pedantic
 CC = cc
 
 zz_compiler : $(OBJS)
-	$(CC) $(OBJS) -o zz_compiler.exe
+	$(CC) $(OBJS) -o zz_compiler
 
 asan : $(OBJS)
 	$(CC) -o zz_compiler.exe $(OBJS) -fsanitize=address -lasan
@@ -22,4 +22,4 @@ MainBuffer.o : code/MainBuffer.c code/Buffer.h
 
 .PHONY : clean
 clean:
-	-rm zz_compiler.exe $(OBJS)
+	-rm zz_compiler $(OBJS)
