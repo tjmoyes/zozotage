@@ -1,9 +1,10 @@
 /*************************************************************
 * REPLACE the file header below with your file header (see CST8152_ASSAMG.pdf for details).
-* File Name: buffer.h
+* File Name: Buffer.h
 * Version: 1.20.1
-* Author: S^R
-* Date: 1 January 2020
+* Authors: Jon Liu 040967432, Tyson Moyes 040761903
+* Date: Jun 5, 2021
+
 * Preprocessor directives, type declarations and prototypes necessary for buffer implementation
 * as required for CST8152-Assignment #1.
 * The file is not completed.
@@ -43,7 +44,7 @@ enum BUFFERMODES {
 #define SOFIA_DEFAULT_INCREMENT 10		/* default increment factor */
 
 /* You should add your own constant definitions here */
-#define SOFIA_MAX_SIZE SHRT_MAX-1		/*maximum capacity*/ 
+#define SOFIA_MAX_SIZE SHRT_MAX-1		/*maximum capacity*/
 
 /* Add your bit-masks constant definitions here - Defined for SOFIA */
 /**/
@@ -57,12 +58,12 @@ enum BUFFERMODES {
 
 /* TO_DO: Adjust to operate with MSB */
 /*
-#define YOURLANG_DEFAULT_FLAG		TO_DEFINE 	
-#define YOURLANG_SET_FLAG_RLC		TO_DEFINE	
-#define YOURLANG_RST_FLAG_RLC		TO_DEFINE	
-#define YOURLANG_CHK_FLAG_RLC		TO_DEFINE	
-#define YOURLANG_SET_FLAG_EOB		TO_DEFINE	
-#define YOURLANG_RST_FLAG_EOB		TO_DEFINE	
+#define YOURLANG_DEFAULT_FLAG		TO_DEFINE
+#define YOURLANG_SET_FLAG_RLC		TO_DEFINE
+#define YOURLANG_RST_FLAG_RLC		TO_DEFINE
+#define YOURLANG_CHK_FLAG_RLC		TO_DEFINE
+#define YOURLANG_SET_FLAG_EOB		TO_DEFINE
+#define YOURLANG_RST_FLAG_EOB		TO_DEFINE
 #define YOURLANG_CHK_FLAG_EOB		TO_DEFINE
 */
 

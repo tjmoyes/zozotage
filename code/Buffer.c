@@ -1,19 +1,19 @@
 /*************************************************************
-* COMPILERS COURSE - Algonquin College
-* Code version: Fall, 2020
-* This Code is EXCLUSIVE for professors (must not be shared)
-* Author: Svillen Ranev - Paulo Sousa
-*************************************************************
-* File name: buffer.c
-* Compiler: MS Visual Studio 2019
-* Author: Paulo Sousa
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013, 014]
-* Assignment: A1.
-* Date: Jan 01 2021
-* Professor: Paulo Sousa
-* Purpose: This file is the main code for Buffeer (A1)
-* Function list: (...).
-*************************************************************/
+ * COMPILERS COURSE - Algonquin College
+ * Code version: Fall, 2020
+ * This Code is EXCLUSIVE for professors (must not be shared)
+ * Author: Svillen Ranev - Paulo Sousa
+ *************************************************************
+ * File name: Buffer.c
+ * Compiler: GCC 9.3, Clang 11
+ * Authors: Jon Liu 040967432, Tyson Moyes 040761903
+ * Course: CST 8152 ï¿½ Compilers, Lab Section: [011, 012, 013, 014]
+ * Assignment: A12
+ * Date: Jun 5, 2021
+ * Professor: Paulo Sousa
+ * Purpose: This file is the main code for Buffer (A1)
+ * Function list: (...). TODO:
+ *************************************************************/
 
 #ifndef COMPILERS_H_
 #include "Compilers.h"
@@ -25,12 +25,12 @@
 
 /************************************************************
 * Function name: bufferCreate
-* Purpose: Creates the buffer according to capacity, increment 
+* Purpose: Creates the buffer according to capacity, increment
 	factor and operational mode (F, A, M)
 * Author: Svillen Ranev / Paulo Sousa
 * History/Versions: Ver 2.0
 * Called functions: calloc(), malloc()
-* Parameters: 
+* Parameters:
 *   size = initial capacity
 *   increment = increment factor
 *   mode = operational mode
@@ -68,7 +68,7 @@ BufferPointer bufferCreate(sofia_int size, sofia_int increment, sofia_int mode) 
 /************************************************************
 * Function name: bufferAddChar
 * Purpose: Adds a char to buffer
-* Parameters: 
+* Parameters:
 *   pBuffer = pointer to Buffer Entity
 *   ch = char to be added
 * Return value: bPointer (pointer to Buffer)
@@ -267,7 +267,7 @@ sofia_int bufferPrint(BufferPointer const pBuffer) {
 
 /************************************************************
 * Function name: bufferLoad
-* Purpose: Loads the string in the buffer with the content of 
+* Purpose: Loads the string in the buffer with the content of
 	an specific file.
 * Parameters:
 *   pBuffer = pointer to Buffer Entity
