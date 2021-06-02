@@ -54,7 +54,7 @@ BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode)
 	b = (BufferPointer)calloc(1, sizeof(Buffer));
 	if (b == NULL)
 		return NULL;
-	b->string = (char *)malloc(size);
+	b->string = (zz_char *)malloc(size);
 	if (!b->string)
 	{
 		free(b);
@@ -111,7 +111,7 @@ BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch)
 		default:
 			return NULL;
 		}
-		tempbuf = (char *)realloc(pBuffer->string, newSize);
+		tempbuf = (zz_char *)realloc(pBuffer->string, newSize);
 		if (!tempbuf)
 			return NULL;
 		if (tempbuf != pBuffer->string)
@@ -172,7 +172,7 @@ zz_bool bufferCheckFull(BufferPointer const pBuffer)
 {
 	if (!pBuffer)
 		return ZZ_FALSE;
-	if (pBuffer->size == pBuffer->offset.addC * (int)sizeof(char))
+	if (pBuffer->size == pBuffer->offset.addC * (zz_int)sizeof(zz_char))
 		return ZZ_TRUE;
 	return ZZ_FALSE;
 }
@@ -218,7 +218,7 @@ zz_int bufferGetSize(BufferPointer const pBuffer)
 zz_int bufferGetMode(BufferPointer const pBuffer)
 {
 	if (!pBuffer)
-		return (char)BUFFER_ERROR;
+		return (zz_char)BUFFER_ERROR;
 	return pBuffer->mode;
 }
 
@@ -266,7 +266,7 @@ zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark)
 zz_int bufferPrint(BufferPointer const pBuffer)
 {
 	zz_int cont = 0;
-	char c;
+	zz_char c;
 	if (!pBuffer || !(pBuffer->string))
 		return BUFFER_ERROR;
 	c = bufferGetChar(pBuffer);
@@ -292,10 +292,10 @@ zz_int bufferPrint(BufferPointer const pBuffer)
 zz_int bufferLoad(BufferPointer const pBuffer, FILE *const fi)
 {
 	zz_int size = 0;
-	char c;
+	zz_char c;
 	if (!fi || !pBuffer)
 		return BUFFER_ERROR;
-	c = (char)fgetc(fi);
+	c = (zz_char)fgetc(fi);
 	while (!feof(fi))
 	{
 		if (!bufferAddChar(pBuffer, c))
