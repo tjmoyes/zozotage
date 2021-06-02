@@ -2,9 +2,8 @@
 ::
 :: COMPILERS COURSE - SCRIPT ---------------------------------------------
 
-:: TODO: CHANGE THE NAME OF BINARY AND INPUTS / OUTPUTS / ERROR FILES
 
-SET COMPILER=Compilers.exe
+SET COMPILER=zz_compiler.exe
 
 REM ---------------------------------------------------------------------
 REM - Begin of Tests (A12 - S21) ----------------------------------------
@@ -14,17 +13,17 @@ REM ---------------------------------------------------------------------
 :: BASIC TESTS  ----------------------------------------------------------
 ::
 REM - Basic Tests (A12 - S21) - - - - - - - - - - - - - - - - - - - - - -
-%COMPILER% 0 a12_empty.sof  > a12_empty.out 2> a12_empty.err
-%COMPILER% 0 a12_hello.sof  > a12_hello.out 2> a12_hello.err
-%COMPILER% 0 a12_basic.sof  > a12_basic.out 2> a12_basic.err
+%COMPILER% 0 input/a12_empty.zz  > input/a12_empty.out 2> input/a12_empty.err
+%COMPILER% 0 input/a12_hello.zz  > input/a12_hello.out 2> input/a12_hello.err
+%COMPILER% 0 input/a12_maxfunction.zz  > input/a12_maxfunction.out 2> input/a12_maxfunction.err
 
 ::
 :: ADVANCED TESTS  -------------------------------------------------------
 ::
 REM - Advanced Tests (A12 - S21) - - - - - - - - -- - - - - - - - - - - -
-%COMPILER% 0 a12_lorem.sof  F 100 10 > a12_lorem-F-100-10.out 2> a12_lorem-F-100-10.err
-%COMPILER% 0 a12_lorem.sof  A 200 20 > a12_lorem-A-200-20.out 2> a12_lorem-A-200-20.err
-%COMPILER% 0 a12_lorem.sof  M 300 30 > a12_lorem-M-300-30.out 2> a12_lorem-M-300-30.err
+%COMPILER% 0 input/a12_lorem.zz  F 100 10 > input/a12_lorem-F-100-10.out 2> input/a12_lorem-F-100-10.err
+%COMPILER% 0 input/a12_lorem.zz  A 200 20 > input/a12_lorem-A-200-20.out 2> input/a12_lorem-A-200-20.err
+%COMPILER% 0 input/a12_lorem.zz  M 300 30 > input/a12_lorem-M-300-30.out 2> input/a12_lorem-M-300-30.err
 
 REM ---------------------------------------------------------------------
 REM - End of Tests (A12 - S21) ------------------------------------------
