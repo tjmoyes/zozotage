@@ -39,31 +39,33 @@
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
-BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode) {
+BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode)
+{
 	BufferPointer b;
-	if (size<0 || size>ZZ_MAX_SIZE)
+	if (size < 0 || size > ZZ_MAX_SIZE)
 		return NULL;
-	if (!size) {
+	if (!size)
+	{
 		size = ZZ_DEFAULT_SIZE;
 		increment = ZZ_DEFAULT_INCREMENT;
 	}
 	if (!increment)
 		mode = MODE_FIXED;
 	b = (BufferPointer)calloc(1, sizeof(Buffer));
-	if (b==NULL)
+	if (b == NULL)
 		return NULL;
-	b->string = (char*)malloc(size);
-	if (!b->string) {
+	b->string = (char *)malloc(size);
+	if (!b->string)
+	{
 		free(b);
 		return NULL;
 	}
 	b->mode = mode;
 	b->size = size;
 	b->increment = increment;
-	b->flags = SOFIA_DEFAULT_FLAG;
+	b->flags = ZZ_DEFAULT_FLAG;
 	return b;
 }
-
 
 /************************************************************
 * Function name: bufferAddChar
@@ -75,16 +77,19 @@ BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode) {
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
-BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch) {
-	zz_char* tempbuf;
+BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch)
+{
+	zz_char *tempbuf;
 	zz_int newSize;
 	if (!pBuffer)
 		return NULL;
-	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_RLC;
+	pBuffer->flags = pBuffer->flags & ZZ_RST_FLAG_RLB;
 	if (pBuffer->offset.addC * sizeof(zz_char) == ZZ_MAX_SIZE)
 		return NULL;
-	if (bufferCheckFull(pBuffer) == ZZ_TRUE) {
-		switch (pBuffer->mode) {
+	if (bufferCheckFull(pBuffer) == ZZ_TRUE)
+	{
+		switch (pBuffer->mode)
+		{
 		case MODE_FIXED:
 			return NULL;
 		case MODE_ADDIT:
@@ -93,7 +98,7 @@ BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch) {
 				return NULL;
 			if (DEBUG)
 				printf("%s%d%s", "\n................\n* New size: ",
-					newSize, "\n................\n");
+					   newSize, "\n................\n");
 			break;
 		case MODE_MULTI:
 			newSize = pBuffer->size * pBuffer->increment;
@@ -101,16 +106,17 @@ BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch) {
 				return NULL;
 			if (DEBUG)
 				printf("%s%d%s", "\n................\n* New size: ",
-					newSize, "\n................\n");
+					   newSize, "\n................\n");
 			break;
 		default:
 			return NULL;
 		}
-		tempbuf = (char*)realloc(pBuffer->string, newSize);
+		tempbuf = (char *)realloc(pBuffer->string, newSize);
 		if (!tempbuf)
 			return NULL;
-		if (tempbuf != pBuffer->string) {
-			pBuffer->flags = pBuffer->flags | SOFIA_SET_FLAG_RLC;
+		if (tempbuf != pBuffer->string)
+		{
+			pBuffer->flags = pBuffer->flags | ZZ_SET_FLAG_RLB;
 			pBuffer->string = tempbuf;
 		}
 		pBuffer->size = newSize;
@@ -127,12 +133,13 @@ BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferClean(BufferPointer const pBuffer) {
+zz_bool bufferClean(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return ZZ_FALSE;
 	pBuffer->offset.addC = pBuffer->offset.mark = pBuffer->offset.getC = 0;
-	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_EOB;
-	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_RLC;
+	pBuffer->flags = pBuffer->flags & ZZ_RST_FLAG_EOB;
+	pBuffer->flags = pBuffer->flags & ZZ_RST_FLAG_RLB;
 	return ZZ_TRUE;
 }
 
@@ -144,7 +151,8 @@ zz_bool bufferClean(BufferPointer const pBuffer) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferDestroy(BufferPointer const pBuffer) {
+zz_bool bufferDestroy(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return ZZ_FALSE;
 	free(pBuffer->string);
@@ -160,7 +168,8 @@ zz_bool bufferDestroy(BufferPointer const pBuffer) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferCheckFull(BufferPointer const pBuffer) {
+zz_bool bufferCheckFull(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return ZZ_FALSE;
 	if (pBuffer->size == pBuffer->offset.addC * (int)sizeof(char))
@@ -176,7 +185,8 @@ zz_bool bufferCheckFull(BufferPointer const pBuffer) {
 * Return value: addcPosition value
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferGetOffsetAddC(BufferPointer const pBuffer) {
+zz_int bufferGetOffsetAddC(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->offset.addC;
@@ -190,7 +200,8 @@ zz_int bufferGetOffsetAddC(BufferPointer const pBuffer) {
 * Return value: Size of buffer.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferGetSize(BufferPointer const pBuffer) {
+zz_int bufferGetSize(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->size;
@@ -204,12 +215,12 @@ zz_int bufferGetSize(BufferPointer const pBuffer) {
 * Return value: operational mode.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferGetMode(BufferPointer const pBuffer) {
+zz_int bufferGetMode(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return (char)BUFFER_ERROR;
 	return pBuffer->mode;
 }
-
 
 /************************************************************
 * Function name: bufferGetOffsetMark
@@ -220,12 +231,12 @@ zz_int bufferGetMode(BufferPointer const pBuffer) {
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
 
-zz_int bufferGetOffsetMark(BufferPointer const pBuffer) {
+zz_int bufferGetOffsetMark(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->offset.mark;
 }
-
 
 /************************************************************
 * Function name: bufferSetOffsetMark
@@ -236,8 +247,9 @@ zz_int bufferGetOffsetMark(BufferPointer const pBuffer) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark) {
-	if (!pBuffer || mark<0 || mark > pBuffer->offset.addC)
+zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark)
+{
+	if (!pBuffer || mark < 0 || mark > pBuffer->offset.addC)
 		return ZZ_FALSE;
 	pBuffer->offset.mark = mark;
 	return ZZ_TRUE;
@@ -251,13 +263,15 @@ zz_bool bufferSetOffsetMark(BufferPointer const pBuffer, zz_int mark) {
 * Return value: Number of chars printed.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferPrint(BufferPointer const pBuffer) {
+zz_int bufferPrint(BufferPointer const pBuffer)
+{
 	zz_int cont = 0;
 	char c;
 	if (!pBuffer || !(pBuffer->string))
 		return BUFFER_ERROR;
 	c = bufferGetChar(pBuffer);
-	while (!(pBuffer->flags & SOFIA_CHK_FLAG_EOB)) {
+	while (!(pBuffer->flags & ZZ_CHK_FLAG_EOB))
+	{
 		cont++;
 		printf("%c", c);
 		c = bufferGetChar(pBuffer);
@@ -275,14 +289,17 @@ zz_int bufferPrint(BufferPointer const pBuffer) {
 * Return value: Number of chars read and put in buffer.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferLoad(BufferPointer const pBuffer, FILE* const fi) {
+zz_int bufferLoad(BufferPointer const pBuffer, FILE *const fi)
+{
 	zz_int size = 0;
 	char c;
 	if (!fi || !pBuffer)
 		return BUFFER_ERROR;
 	c = (char)fgetc(fi);
-	while (!feof(fi)) {
-		if (!bufferAddChar(pBuffer, c)) {
+	while (!feof(fi))
+	{
+		if (!bufferAddChar(pBuffer, c))
+		{
 			ungetc(c, fi);
 			return BUFFER_ERROR;
 		}
@@ -302,7 +319,8 @@ zz_int bufferLoad(BufferPointer const pBuffer, FILE* const fi) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferCheckEmpty(BufferPointer const pBuffer) {
+zz_bool bufferCheckEmpty(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return ZZ_FALSE;
 	if (pBuffer->offset.addC == 0)
@@ -318,17 +336,18 @@ zz_bool bufferCheckEmpty(BufferPointer const pBuffer) {
 * Return value: Char in the getC position.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_char bufferGetChar(BufferPointer const pBuffer) {
+zz_char bufferGetChar(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return BUFFER_ERROR;
-	if (pBuffer->offset.getC == pBuffer->offset.addC) {
-		pBuffer->flags = pBuffer->flags | SOFIA_SET_FLAG_EOB;
+	if (pBuffer->offset.getC == pBuffer->offset.addC)
+	{
+		pBuffer->flags = pBuffer->flags | ZZ_SET_FLAG_EOB;
 		return '\0';
 	}
-	pBuffer->flags = pBuffer->flags & SOFIA_RST_FLAG_EOB;
+	pBuffer->flags = pBuffer->flags & ZZ_RST_FLAG_EOB;
 	return pBuffer->string[pBuffer->offset.getC++];
 }
-
 
 /************************************************************
 * Function name: bufferRewind
@@ -338,14 +357,14 @@ zz_char bufferGetChar(BufferPointer const pBuffer) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferRewind(BufferPointer const pBuffer) {
+zz_bool bufferRewind(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return ZZ_FALSE;
 	pBuffer->offset.getC = 0;
 	pBuffer->offset.mark = 0;
 	return ZZ_TRUE;
 }
-
 
 /************************************************************
 * Function name: bufferRetract
@@ -355,13 +374,13 @@ zz_bool bufferRewind(BufferPointer const pBuffer) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferRetract(BufferPointer const pBuffer) {
+zz_bool bufferRetract(BufferPointer const pBuffer)
+{
 	if (!pBuffer || pBuffer->offset.getC == 0)
 		return ZZ_FALSE;
 	pBuffer->offset.getC--;
 	return ZZ_TRUE;
 }
-
 
 /************************************************************
 * Function name: bufferRestore
@@ -371,13 +390,13 @@ zz_bool bufferRetract(BufferPointer const pBuffer) {
 * Return value: Boolean value about operation success
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_bool bufferRestore(BufferPointer const pBuffer) {
+zz_bool bufferRestore(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return ZZ_FALSE;
 	pBuffer->offset.getC = pBuffer->offset.mark;
 	return ZZ_TRUE;
 }
-
 
 /************************************************************
 * Function name: bufferGetCPosition
@@ -387,12 +406,12 @@ zz_bool bufferRestore(BufferPointer const pBuffer) {
 * Return value: The getC offset.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferGetOffsetGetC(BufferPointer const pBuffer) {
+zz_int bufferGetOffsetGetC(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->offset.getC;
 }
-
 
 /************************************************************
 * Function name: bufferGetIncrement
@@ -402,12 +421,12 @@ zz_int bufferGetOffsetGetC(BufferPointer const pBuffer) {
 * Return value: The Buffer increment.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_int bufferGetIncrement(BufferPointer const pBuffer) {
+zz_int bufferGetIncrement(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return BUFFER_ERROR;
 	return pBuffer->increment;
 }
-
 
 /************************************************************
 * Function name: bufferGetString
@@ -418,12 +437,12 @@ zz_int bufferGetIncrement(BufferPointer const pBuffer) {
 * Return value: Position of string char.
 * TODO: Adjust for your LANGUAGE.
 **************************************************************/
-zz_char* bufferGetSubString(BufferPointer const pBuffer, zz_int pos) {
+zz_char *bufferGetSubString(BufferPointer const pBuffer, zz_int pos)
+{
 	if (!pBuffer || pos < 0 || pos > pBuffer->offset.addC)
 		return NULL;
 	return pBuffer->string + pos;
 }
-
 
 /************************************************************
 * Function name: bufferGetFlags
@@ -436,11 +455,12 @@ zz_char* bufferGetSubString(BufferPointer const pBuffer, zz_int pos) {
 #define FLAGS_
 #undef FLAGS_
 #ifndef FLAGS_
-zz_flags bufferGetFlags(BufferPointer const pBuffer) {
+zz_flags bufferGetFlags(BufferPointer const pBuffer)
+{
 	if (!pBuffer)
 		return (unsigned char)BUFFER_ERROR;
 	return pBuffer->flags;
 }
 #else
-#define bGetFlags(pBuffer) ((pBuffer)?(pBuffer->flags):(RT_FAIL_1))
+#define bGetFlags(pBuffer) ((pBuffer) ? (pBuffer->flags) : (RT_FAIL_1))
 #endif
