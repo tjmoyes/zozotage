@@ -17,7 +17,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifndef COMPILERS_H_
 #include "Compilers.h"
+#endif
 
 /************************************************************
 * Function name: main
@@ -30,28 +33,26 @@
 * Algorithm: -
 **************************************************************/
 
-int main(int argc, char** argv) {
-	int i;
+sofia_int main(int argc, char** argv) {
+	sofia_int i;
 	if (DEBUG) {
 		for (i = 0; i < argc; ++i)
 			printf("argv[%d] = %s\n", i, argv[i]);
 	}
 	if (argc < 2) {
-		printf("%s%s%c%s%c%s%c%s", argv[0], ": OPTIONS [", 
-			PGM_BUFFER, "] - Buffer, [", 
-			PGM_SCANNER, "] - Scanner, [", 
+		printf("%s%s%c%s%c%s%c%s", argv[0], ": OPTIONS [",
+			PGM_BUFFER, "] - Buffer, [",
+			PGM_SCANNER, "] - Scanner, [",
 			PGM_PARSER, "] - Parser\n");
 	}
-	char option = argv[1][0];
+	sofia_chr option = argv[1][0];
 	switch (option) {
 	case PGM_BUFFER:
-		mainBuffer(argc, argv);
 		break;
 	case PGM_SCANNER:
-		/* mainScanner(argc, argv); */
+		mainScanner(argc, argv);
 		break;
 	case PGM_PARSER:
-		/* mainParser(argc, argv); */
 		break;
 	default:
 		printf("%s%s%c%s%c%s%c%s", argv[0], ": OPTIONS [",

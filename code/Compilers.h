@@ -18,17 +18,40 @@
 #ifndef COMPILERS_H_
 #define COMPILERS_H_
 
-#define DEBUG 1
+#define DEBUG 0
 
-/* Buffer Modes */
+/*
+------------------------------------------------------------
+Buffer Modes
+------------------------------------------------------------
+*/
 enum PROGRAMS {
-	PGM_BUFFER	=	'0',
-	PGM_SCANNER	=	'1',
-	PGM_PARSER	=	'2'
+	PGM_BUFFER = '0',
+	PGM_SCANNER = '1',
+	PGM_PARSER = '2'
 };
 
-int mainBuffer(int argc, char** argv);
+/*
+------------------------------------------------------------
+Main functions
+------------------------------------------------------------
+*/
 int mainScanner(int argc, char** argv);
-int mainParser(int argc, char** argv);
+
+/*
+------------------------------------------------------------
+Data types definitions
+------------------------------------------------------------
+*/
+
+// TO_DO_1: Define your typedefs!
+typedef short			sofia_int;
+typedef long			sofia_lng;
+typedef char			sofia_chr;
+typedef unsigned char	sofia_flg;
+typedef char			sofia_bol;
+typedef float			sofia_flt;
+typedef double			sofia_dbl;
+typedef void			sofia_nul;
 
 #endif
