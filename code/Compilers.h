@@ -7,7 +7,7 @@
 * File name: compilers.h
 * Compiler: MS Visual Studio 2019
 * Author: Paulo Sousa
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013, 021, 022, or 023]
+* Course: CST 8152 - Compilers, Lab Section: [011, 012, 013, 021, 022, or 023]
 * Assignment: A1, A2, A3.
 * Date: Sep 01 2020
 * Professor: Paulo Sousa / Haider Miraj
@@ -25,7 +25,8 @@
 Buffer Modes
 ------------------------------------------------------------
 */
-enum PROGRAMS {
+enum PROGRAMS
+{
 	PGM_BUFFER = '0',
 	PGM_SCANNER = '1',
 	PGM_PARSER = '2'
@@ -36,7 +37,7 @@ enum PROGRAMS {
 Main functions
 ------------------------------------------------------------
 */
-int mainScanner(int argc, char** argv);
+int mainScanner(int argc, char **argv);
 
 /*
 ------------------------------------------------------------
@@ -44,14 +45,13 @@ Data types definitions
 ------------------------------------------------------------
 */
 
-// TO_DO_1: Define your typedefs!
-typedef short			sofia_int;
-typedef long			sofia_lng;
-typedef char			sofia_chr;
-typedef unsigned char	sofia_flg;
-typedef char			sofia_bol;
-typedef float			sofia_flt;
-typedef double			sofia_dbl;
-typedef void			sofia_nul;
+typedef int zz_int;
+typedef long zz_lng;
+typedef char zz_char;
+typedef unsigned char zz_flags;
+typedef char zz_bool;
+typedef float zz_flt;
+typedef double zz_dbl;
+typedef void zz_nul;
 
 #endif

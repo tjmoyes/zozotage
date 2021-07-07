@@ -1,36 +1,44 @@
 /*************************************************************
 * COMPILERS COURSE - Algonquin College
 * Code version: Summer, 2021
-* Author: Svillen Ranev - Paulo Sousa.
+* Author: Svillen Ranev - Paulo Sousa, Jon Liu 040967432, Tyson Moyes 040761903
 *************************************************************
 * File name: Scanner.c
 * Compiler: MS Visual Studio 2019
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013]
-* Assignment: A2.
-* Date: May 01 2021
+* Course: CST 8152 - Compilers, Lab Section: 013
+* Assignment: A22
+* Date: July 7, 2021
 * Professor: Paulo Sousa
 * Purpose: This file contains all functionalities from Scanner.
-* Function list: (...).
+* Function list:
+* - startScanner
+* - tokenizer
+* - nextState
+* - nextClass
+* - funcVID
+* - funcIL
+* - funcFL
+* - funcSL
+* - funcKW
+* - funcErr
 *************************************************************/
 
-/* TODO: Adjust the function header */
-
- /* The #define _CRT_SECURE_NO_WARNINGS should be used in MS Visual Studio projects
+/* The #define _CRT_SECURE_NO_WARNINGS should be used in MS Visual Studio projects
   * to suppress the warnings about using "unsafe" functions like fopen()
   * and standard sting library functions defined in string.h.
   * The define does not have any effect in Borland compiler projects.
   */
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <stdio.h>   /* standard input / output */
-#include <ctype.h>   /* conversion functions */
-#include <stdlib.h>  /* standard library functions and constants */
-#include <string.h>  /* string functions */
-#include <limits.h>  /* integer types constants */
-#include <float.h>   /* floating-point types constants */
+#include <stdio.h>  /* standard input / output */
+#include <ctype.h>  /* conversion functions */
+#include <stdlib.h> /* standard library functions and constants */
+#include <string.h> /* string functions */
+#include <limits.h> /* integer types constants */
+#include <float.h>  /* floating-point types constants */
 
-  /* #define NDEBUG        to suppress assert() call */
-#include <assert.h>  /* assert() prototype */
+/* #define NDEBUG        to suppress assert() call */
+#include <assert.h> /* assert() prototype */
 
 /* project header files */
 
@@ -48,39 +56,40 @@
 
 /*
 ----------------------------------------------------------------
-TO_DO 12: Global vars definitions
+TODO: 12: Global vars definitions
 ----------------------------------------------------------------
 */
 
 /* Global objects - variables */
 /* This buffer is used as a repository for string literals. */
-extern BufferPointer stringLiteralTable;		/* String literal table */
-sofia_int line;									/* Current line number of the source code */
-extern sofia_int errorNumber;					/* Defined in platy_st.c - run-time error number */
+extern BufferPointer stringLiteralTable; /* String literal table */
+zz_int line;                             /* Current line number of the source code */
+extern zz_int errorNumber;               /* Defined in platy_st.c - run-time error number */
 
-extern sofia_int stateType[];
-extern sofia_chr* keywordTable[];
+extern zz_int stateType[];
+extern zz_char *keywordTable[];
 extern PTR_ACCFUN finalStateTable[];
-extern sofia_int transitionTable[][TABLE_COLUMNS];
+extern zz_int transitionTable[][TABLE_COLUMNS];
 
 /* Local(file) global objects - variables */
-static BufferPointer lexemeBuffer;			/* pointer to temporary lexeme buffer */
-static BufferPointer sourceBuffer;			/* pointer to input source buffer */
+static BufferPointer lexemeBuffer; /* pointer to temporary lexeme buffer */
+static BufferPointer sourceBuffer; /* pointer to input source buffer */
 
 /*************************************************************
  * Intitializes scanner
  *		This function initializes the scanner using defensive programming.
  ************************************************************/
- /* TO_DO 13: Follow the standard and adjust datatypes */
-sofia_int startScanner(BufferPointer psc_buf) {
-	if (bufferCheckEmpty(psc_buf) == SOFIA_TRUE)
-		return EXIT_FAILURE; /*1*/
-	/* in case the buffer has been read previously  */
-	bufferRewind(psc_buf);
-	bufferClean(stringLiteralTable);
-	line = 1;
-	sourceBuffer = psc_buf;
-	return EXIT_SUCCESS; /*0*/
+/* TODO: 13: Follow the standard and adjust datatypes */
+zz_int startScanner(BufferPointer psc_buf)
+{
+  if (bufferCheckEmpty(psc_buf) == ZZ_TRUE)
+    return EXIT_FAILURE; /*1*/
+  /* in case the buffer has been read previously  */
+  bufferRewind(psc_buf);
+  bufferClean(stringLiteralTable);
+  line = 1;
+  sourceBuffer = psc_buf;
+  return EXIT_SUCCESS; /*0*/
 }
 
 /*************************************************************
@@ -91,132 +100,141 @@ sofia_int startScanner(BufferPointer psc_buf) {
  *		is recognized and the appropriate function is called (related to final states
  *		in the Transition Diagram).
  ************************************************************/
-Token tokenizer(void) {
+Token tokenizer(void)
+{
 
-	/* TO_DO 14: Follow the standard and adjust datatypes */
+  /* TODO: 14: Follow the standard and adjust datatypes */
 
-	Token currentToken = { 0 }; /* token to return after pattern recognition. Set all structure members to 0 */
-	sofia_chr c;	/* input symbol */
-	sofia_int state = 0;		/* initial state of the FSM */
-	sofia_int lexStart;		/* start offset of a lexeme in the input char buffer (array) */
-	sofia_int lexEnd;		/* end offset of a lexeme in the input char buffer (array)*/
+  Token currentToken = {0}; /* token to return after pattern recognition. Set all structure members to 0 */
+  zz_char c;                /* input symbol */
+  zz_int state = 0;         /* initial state of the FSM */
+  zz_int lexStart;          /* start offset of a lexeme in the input char buffer (array) */
+  zz_int lexEnd;            /* end offset of a lexeme in the input char buffer (array)*/
 
-	sofia_int lexLength;		/* token length */
-	sofia_int i;				/* counter */
-	sofia_chr newc;			/* new char */
+  zz_int lexLength; /* token length */
+  zz_int i;         /* counter */
+  zz_char newc;     /* new char */
 
-	while (1) { /* endless loop broken by token returns it will generate a warning */
-		c = bufferGetChar(sourceBuffer);
+  while (1)
+  { /* endless loop broken by token returns it will generate a warning */
+    c = bufferGetChar(sourceBuffer);
 
-		/* ------------------------------------------------------------------------
+    /* ------------------------------------------------------------------------
 			Part 1: Implementation of token driven scanner.
 			Every token is possessed by its own dedicated code
 			-----------------------------------------------------------------------
 		*/
 
-		/* TO_DO 15: All patterns that do not require accepting functions */
-		switch (c) {
+    /* TODO: 15: All patterns that do not require accepting functions */
+    switch (c)
+    {
 
-			/* Cases for spaces */
-		case ' ':
-			break;
-		case '\n':
-			line++;
-			break;
-			/* TODO_15A: See all other elements */
+      /* Cases for spaces */
+    case ' ':
+      break;
+    case '\n':
+      line++;
+      break;
+      /* TODO_15A: See all other elements */
 
-			/* Cases for symbols */
-		case '(':
-			currentToken.code = LPR_T;
-			return currentToken;
-		case '+':
-			newc = bufferGetChar(sourceBuffer);
-			if (newc == '+') {
-				currentToken.code = SCC_OP_T;
-				return currentToken;
-			}
-			bufferRetract(sourceBuffer);
-			currentToken.code = ART_OP_T;
-			currentToken.attribute.codeType = ADD;
-			return currentToken;
-			/* TODO_15B: See all other elements */
+      /* Cases for symbols */
+    case '(':
+      currentToken.code = LPR_T;
+      return currentToken;
+    case '+':
+      newc = bufferGetChar(sourceBuffer);
+      if (newc == '+')
+      {
+        currentToken.code = SCC_OP_T;
+        return currentToken;
+      }
+      bufferRetract(sourceBuffer);
+      currentToken.code = ART_OP_T;
+      currentToken.attribute.codeType = ADD;
+      return currentToken;
+      /* TODO_15B: See all other elements */
 
-		case '.':
-			/* AND operator */
-			bufferSetOffsetMark(sourceBuffer, bufferGetOffsetGetC(sourceBuffer));
-			if (bufferGetChar(sourceBuffer) == '&' &&
-				bufferGetChar(sourceBuffer) == '.') {
-				currentToken.code = LOG_OP_T;
-				currentToken.attribute.codeType = AND;
-				return currentToken;
-			}
-			else
-				bufferRestore(sourceBuffer);
-			/* TODO_15C: Other logical operators */
+    case '.':
+      /* AND operator */
+      bufferSetOffsetMark(sourceBuffer, bufferGetOffsetGetC(sourceBuffer));
+      if (bufferGetChar(sourceBuffer) == '&' &&
+          bufferGetChar(sourceBuffer) == '.')
+      {
+        currentToken.code = LOG_OP_T;
+        currentToken.attribute.codeType = AND;
+        return currentToken;
+      }
+      else
+        bufferRestore(sourceBuffer);
+      /* TODO_15C: Other logical operators */
 
-		/* Comments */
-		case '@':
-			newc = bufferGetChar(sourceBuffer);
-			do {
-				c = bufferGetChar(sourceBuffer);
-				if (c == CHARSEOF0 || c == CHARSEOF255) {
-					bufferRetract(sourceBuffer);
-					//return currentToken;
-				}
-				else if (c == '\n') {
-					line++;
-				}
-			} while (c != '@' && c != CHARSEOF0 && c != CHARSEOF255);
-			break;
+    /* Comments */
+    case '@':
+      newc = bufferGetChar(sourceBuffer);
+      do
+      {
+        c = bufferGetChar(sourceBuffer);
+        if (c == CHARSEOF0 || c == CHARSEOF255)
+        {
+          bufferRetract(sourceBuffer);
+          //return currentToken;
+        }
+        else if (c == '\n')
+        {
+          line++;
+        }
+      } while (c != '@' && c != CHARSEOF0 && c != CHARSEOF255);
+      break;
 
-		/* Cases for END OF FILE */
-		case CHARSEOF0:
-			currentToken.code = SEOF_T;
-			currentToken.attribute.seofType = SEOF_0;
-			return currentToken;
-		case CHARSEOF255:
-			currentToken.code = SEOF_T;
-			currentToken.attribute.seofType = SEOF_EOF;
-			return currentToken;
+    /* Cases for END OF FILE */
+    case CHARSEOF0:
+      currentToken.code = SEOF_T;
+      currentToken.attribute.seofType = SEOF_0;
+      return currentToken;
+    case CHARSEOF255:
+      currentToken.code = SEOF_T;
+      currentToken.attribute.seofType = SEOF_EOF;
+      return currentToken;
 
-			/* ------------------------------------------------------------------------
+      /* ------------------------------------------------------------------------
 				Part 2: Implementation of Finite State Machine (DFA) or Transition Table driven Scanner
 				Note: Part 2 must follow Part 1 to catch the illegal symbols
 				-----------------------------------------------------------------------
 			*/
 
-			/* TO_DO_16: Adjust / check the logic for your language */
+      /* TODO:_16: Adjust / check the logic for your language */
 
-		default: // general case
-			state = nextState(state, c);
-			lexStart = bufferGetOffsetGetC(sourceBuffer) - 1;
-			bufferSetOffsetMark(sourceBuffer, lexStart);
-			while (stateType[state] == NOAS) {
-				c = bufferGetChar(sourceBuffer);
-				state = nextState(state, c);
-			}
-			if (stateType[state] == ASWR)
-				bufferRetract(sourceBuffer);
-			lexEnd = bufferGetOffsetGetC(sourceBuffer);
-			lexLength = lexEnd - lexStart;
-			lexemeBuffer = bufferCreate((short)lexLength + 2, 0, MODE_FIXED);
-			if (!lexemeBuffer) {
-				fprintf(stderr, "Scanner error: Can not create buffer\n");
-				exit(1);
-			}
-			bufferRestore(sourceBuffer);
-			for (i = 0; i < lexLength; i++)
-				bufferAddChar(lexemeBuffer, bufferGetChar(sourceBuffer));
-			bufferAddChar(lexemeBuffer, BUFFER_EOF);
-			currentToken = (*finalStateTable[state])(bufferGetSubString(lexemeBuffer, 0));
-			bufferDestroy(lexemeBuffer);
-			return currentToken;
-		} // switch
+    default: // general case
+      state = nextState(state, c);
+      lexStart = bufferGetOffsetGetC(sourceBuffer) - 1;
+      bufferSetOffsetMark(sourceBuffer, lexStart);
+      while (stateType[state] == NOAS)
+      {
+        c = bufferGetChar(sourceBuffer);
+        state = nextState(state, c);
+      }
+      if (stateType[state] == ASWR)
+        bufferRetract(sourceBuffer);
+      lexEnd = bufferGetOffsetGetC(sourceBuffer);
+      lexLength = lexEnd - lexStart;
+      lexemeBuffer = bufferCreate((short)lexLength + 2, 0, MODE_FIXED);
+      if (!lexemeBuffer)
+      {
+        fprintf(stderr, "Scanner error: Can not create buffer\n");
+        exit(1);
+      }
+      bufferRestore(sourceBuffer);
+      for (i = 0; i < lexLength; i++)
+        bufferAddChar(lexemeBuffer, bufferGetChar(sourceBuffer));
+      bufferAddChar(lexemeBuffer, BUFFER_EOF);
+      currentToken = (*finalStateTable[state])(bufferGetSubString(lexemeBuffer, 0));
+      bufferDestroy(lexemeBuffer);
+      return currentToken;
+    } // switch
 
-	} //while
+  } //while
 
 } // tokenizer
-
 
 /*************************************************************
  * Get Next State
@@ -240,23 +258,25 @@ Token tokenizer(void) {
 	Once the program is tested thoroughly #define DEBUG is commented out
 	or #undef DEBUF is used - see the top of the file.
  ************************************************************/
- /* TO_DO 17: Just change the datatypes */
+/* TODO: 17: Just change the datatypes */
 
-sofia_int nextState(sofia_int state, sofia_chr c) {
-	sofia_int col;
-	sofia_int next;
-	col = nextClass(c);
-	next = transitionTable[state][col];
-	if (DEBUG)
-		printf("Input symbol: %c Row: %d Column: %d Next: %d \n", c, state, col, next);
-	assert(next != IS);
-	if (DEBUG)
-		if (next == IS) {
-			printf("Scanner Error: Illegal state:\n");
-			printf("Input symbol: %c Row: %d Column: %d\n", c, state, col);
-			exit(1);
-		}
-	return next;
+zz_int nextState(zz_int state, zz_char c)
+{
+  zz_int col;
+  zz_int next;
+  col = nextClass(c);
+  next = transitionTable[state][col];
+  if (DEBUG)
+    printf("Input symbol: %c Row: %d Column: %d Next: %d \n", c, state, col, next);
+  assert(next != IS);
+  if (DEBUG)
+    if (next == IS)
+    {
+      printf("Scanner Error: Illegal state:\n");
+      printf("Input symbol: %c Row: %d Column: %d\n", c, state, col);
+      exit(1);
+    }
+  return next;
 }
 
 /*************************************************************
@@ -265,44 +285,46 @@ sofia_int nextState(sofia_int state, sofia_chr c) {
 	* Considering an input char c, you can identify the "class".
 	* For instance, a letter should return the column for letters, etc.
 ************************************************************/
-/* TO_DO 18: Use your column configuration */
+/* TODO: 18: Use your column configuration */
 
-sofia_int nextClass(sofia_chr c) {
-	sofia_int val = -1;
-	/* Adjust the logic to return next column in TT */
-	/*	[A-z](0), [0-9](1), _(2), .(3), #(4), %(5), $(6), "(7), SEOF(8), other(9) */
-	switch (c) {
-	case CHRCOL2:
-		val = 2;
-		break;
-	case CHRCOL3:
-		val = 3;
-		break;
-	case CHRCOL4:
-		val = 4;
-		break;
-	case CHRCOL5:
-		val = 5;
-		break;
-	case CHRCOL6:
-		val = 6;
-		break;
-	case CHRCOL7:
-		val = 7;
-		break;
-	case CHARSEOF0:
-	case CHARSEOF255:
-		val = 8;
-		break;
-	default:
-		if (isalpha(c))
-			val = 0;
-		else if (isdigit(c))
-			val = 1;
-		else
-			val = 9;
-	} //switch
-	return val;
+zz_int nextClass(zz_char c)
+{
+  zz_int val = -1;
+  /* Adjust the logic to return next column in TT */
+  /*	[A-z](0), [0-9](1), _(2), .(3), #(4), %(5), $(6), "(7), SEOF(8), other(9) */
+  switch (c)
+  {
+  case CHRCOL2:
+    val = 2;
+    break;
+  case CHRCOL3:
+    val = 3;
+    break;
+  case CHRCOL4:
+    val = 4;
+    break;
+  case CHRCOL5:
+    val = 5;
+    break;
+  case CHRCOL6:
+    val = 6;
+    break;
+  case CHRCOL7:
+    val = 7;
+    break;
+  case CHARSEOF0:
+  case CHARSEOF255:
+    val = 8;
+    break;
+  default:
+    if (isalpha(c))
+      val = 0;
+    else if (isdigit(c))
+      val = 1;
+    else
+      val = 9;
+  } //switch
+  return val;
 }
 
 /*************************************************************
@@ -315,26 +337,29 @@ sofia_int nextClass(sofia_chr c) {
  *    Remember to end each token with the \0.
  *  - Suggestion: Use "strncpy" function.
  ************************************************************/
- /* TO_DO_19A: Adjust the function for VID */
-Token funcVID(sofia_chr lexeme[]) {
-	Token currentToken = { 0 };
-	switch (lexeme[0]) {
-	case IVIDPREFIX:
-		currentToken.code = IVID_T;
-		break;
-	case FVIDPREFIX:
-		currentToken.code = FVID_T;
-		break;
-	case SVIDPREFIX:
-		currentToken.code = SVID_T;
-		break;
-	default:
-		currentToken.code = ERR_T;
-		break;
-	}
-	strncpy(currentToken.attribute.vidLexeme, lexeme, VID_LEN);
-	currentToken.attribute.vidLexeme[VID_LEN] = CHARSEOF0;
-	return currentToken;
+/* TODO:_19A: Adjust the function for VID */
+Token funcVID(zz_char lexeme[])
+{
+  Token currentToken = {0};
+  switch (lexeme[0])
+  {
+  /* TODO: We only use VID, not specific types. This needs to be altered */
+  case IVIDPREFIX:
+    /* currentToken.code = IVID_T; */
+    break;
+  case FVIDPREFIX:
+    /* currentToken.code = FVID_T; */
+    break;
+  case SVIDPREFIX:
+    /*currentToken.code = SVID_T;*/
+    break;
+  default:
+    currentToken.code = ERR_T;
+    break;
+  }
+  strncpy(currentToken.attribute.vidLexeme, lexeme, VID_LEN);
+  currentToken.attribute.vidLexeme[VID_LEN] = CHARSEOF0;
+  return currentToken;
 }
 
 /*************************************************************
@@ -345,25 +370,30 @@ Token funcVID(sofia_chr lexeme[]) {
  * - Only first ERR_LEN characters are accepted and eventually,
  *   additional three dots (...) should be put in the output.
  ************************************************************/
- /* TO_DO_19B: Adjust the function for IL */
+/* TODO:_19B: Adjust the function for IL */
 
-Token funcIL(sofia_chr lexeme[]) {
-	Token currentToken = { 0 };
-	sofia_lng tlong;
-	if (lexeme[0] != '\0' && strlen(lexeme) > NUM_LEN) {
-		currentToken = (*finalStateTable[ES])(lexeme);
-	}
-	else {
-		tlong = atol(lexeme);
-		if (tlong >= 0 && tlong <= SHRT_MAX) {
-			currentToken.code = INL_T;
-			currentToken.attribute.intValue = (sofia_int)tlong;
-		}
-		else {
-			currentToken = (*finalStateTable[ES])(lexeme);
-		}
-	}
-	return currentToken;
+Token funcIL(zz_char lexeme[])
+{
+  Token currentToken = {0};
+  zz_lng tlong;
+  if (lexeme[0] != '\0' && strlen(lexeme) > NUM_LEN)
+  {
+    currentToken = (*finalStateTable[ES])(lexeme);
+  }
+  else
+  {
+    tlong = atol(lexeme);
+    if (tlong >= 0 && tlong <= SHRT_MAX)
+    {
+      currentToken.code = INL_T;
+      currentToken.attribute.intValue = (zz_int)tlong;
+    }
+    else
+    {
+      currentToken = (*finalStateTable[ES])(lexeme);
+    }
+  }
+  return currentToken;
 }
 
 /*************************************************************
@@ -374,19 +404,22 @@ Token funcIL(sofia_chr lexeme[]) {
  * - Only first ERR_LEN characters are accepted and eventually,
  *   additional three dots (...) should be put in the output.
  ************************************************************/
- /* TO_DO_19C: Adjust the function for FPL */
+/* TODO:_19C: Adjust the function for FPL */
 
-Token funcFPL(sofia_chr lexeme[]) {
-	Token currentToken = { 0 };
-	sofia_dbl tdouble = atof(lexeme);
-	if (tdouble == 0.0 || tdouble >= FLT_MIN && tdouble <= FLT_MAX) {
-		currentToken.code = FPL_T;
-		currentToken.attribute.floatValue = (sofia_flt)tdouble;
-	}
-	else {
-		currentToken = (*finalStateTable[ES])(lexeme);
-	}
-	return currentToken;
+Token funcFL(zz_char lexeme[])
+{
+  Token currentToken = {0};
+  zz_dbl tdouble = atof(lexeme);
+  if (tdouble == 0.0 || tdouble >= FLT_MIN && tdouble <= FLT_MAX)
+  {
+    currentToken.code = FPL_T;
+    currentToken.attribute.floatValue = (zz_flt)tdouble;
+  }
+  else
+  {
+    currentToken = (*finalStateTable[ES])(lexeme);
+  }
+  return currentToken;
 }
 
 /*************************************************************
@@ -397,55 +430,60 @@ Token funcFPL(sofia_chr lexeme[]) {
  *   this structure, using offsets. Remember to include \0 to
  *   separate the lexemes. Remember also to incremente the line.
  ************************************************************/
- /* TO_DO_19D: Adjust the function for SL */
+/* TODO:_19D: Adjust the function for SL */
 
-Token funcSL(sofia_chr lexeme[]) {
-	Token currentToken = { 0 };
-	sofia_int i = 0, len = (sofia_int)strlen(lexeme);
-	currentToken.attribute.contentString = bufferGetOffsetAddC(stringLiteralTable);
-	for (i = 1; i < len - 1; i++) {
-		if (lexeme[i] == '\n')
-			line++;
-		if (!bufferAddChar(stringLiteralTable, lexeme[i])) {
-			currentToken.code = RTE_T;
-			strcpy(currentToken.attribute.errLexeme, "Run Time Error:");
-			errorNumber = RTE_CODE;
-			return currentToken;
-		}
-	}
-	if (!bufferAddChar(stringLiteralTable, CHARSEOF0)) {
-		currentToken.code = RTE_T;
-		strcpy(currentToken.attribute.errLexeme, "Run Time Error:");
-		errorNumber = RTE_CODE;
-		return currentToken;
-	}
-	currentToken.code = STR_T;
-	return currentToken;
+Token funcSL(zz_char lexeme[])
+{
+  Token currentToken = {0};
+  zz_int i = 0, len = (zz_int)strlen(lexeme);
+  currentToken.attribute.contentString = bufferGetOffsetAddC(stringLiteralTable);
+  for (i = 1; i < len - 1; i++)
+  {
+    if (lexeme[i] == '\n')
+      line++;
+    if (!bufferAddChar(stringLiteralTable, lexeme[i]))
+    {
+      currentToken.code = RTE_T;
+      strcpy(currentToken.attribute.errLexeme, "Run Time Error:");
+      errorNumber = RTE_CODE;
+      return currentToken;
+    }
+  }
+  if (!bufferAddChar(stringLiteralTable, CHARSEOF0))
+  {
+    currentToken.code = RTE_T;
+    strcpy(currentToken.attribute.errLexeme, "Run Time Error:");
+    errorNumber = RTE_CODE;
+    return currentToken;
+  }
+  currentToken.code = STR_T;
+  return currentToken;
 }
-
 
 /*************************************************************
  * This function checks if one specific lexeme is a keyword.
  * - Tip: Remember to use the keywordTable to check the keywords.
  ************************************************************/
- /* TO_DO_19E: Adjust the function for Keywords */
+/* TODO:_19E: Adjust the function for Keywords */
 
-Token funcKEY(sofia_chr lexeme[]) {
-	Token currentToken = { 0 };
-	sofia_int kwindex = -1, j = 0;
-	for (j = 0; j < KWT_SIZE; j++)
-		if (!strcmp(lexeme, &keywordTable[j][0]))
-			kwindex = j;
-	if (kwindex != -1) {
-		currentToken.code = KW_T;
-		currentToken.attribute.codeType = kwindex;
-	}
-	else {
-		currentToken = funcErr(lexeme);
-	}
-	return currentToken;
+Token funcKW(zz_char lexeme[])
+{
+  Token currentToken = {0};
+  zz_int kwindex = -1, j = 0;
+  for (j = 0; j < KWT_SIZE; j++)
+    if (!strcmp(lexeme, &keywordTable[j][0]))
+      kwindex = j;
+  if (kwindex != -1)
+  {
+    currentToken.code = KW_T;
+    currentToken.attribute.codeType = kwindex;
+  }
+  else
+  {
+    currentToken = funcErr(lexeme);
+  }
+  return currentToken;
 }
-
 
 /*************************************************************
  * Acceptance State Function Error
@@ -455,26 +493,29 @@ Token funcKEY(sofia_chr lexeme[]) {
  *   limit defined. The error lexeme contains line terminators,
  *   so remember to increment line.
  ************************************************************/
- /* TO_DO_19F: Adjust the function for Errors */
+/* TODO:_19F: Adjust the function for Errors */
 
-Token funcErr(sofia_chr lexeme[]) {
-	Token currentToken = { 0 };
-	sofia_int i = 0, len = (sofia_int)strlen(lexeme);
-	if (len > ERR_LEN) {
-		strncpy(currentToken.attribute.errLexeme, lexeme, ERR_LEN - 3);
-		currentToken.attribute.errLexeme[ERR_LEN - 3] = CHARSEOF0;
-		strcat(currentToken.attribute.errLexeme, "...");
-	}
-	else {
-		strcpy(currentToken.attribute.errLexeme, lexeme);
-	}
-	for (i = 0; i < len; i++)
-		if (lexeme[i] == '\n')
-			line++;
-	currentToken.code = ERR_T;
-	return currentToken;
+Token funcErr(zz_char lexeme[])
+{
+  Token currentToken = {0};
+  zz_int i = 0, len = (zz_int)strlen(lexeme);
+  if (len > ERR_LEN)
+  {
+    strncpy(currentToken.attribute.errLexeme, lexeme, ERR_LEN - 3);
+    currentToken.attribute.errLexeme[ERR_LEN - 3] = CHARSEOF0;
+    strcat(currentToken.attribute.errLexeme, "...");
+  }
+  else
+  {
+    strcpy(currentToken.attribute.errLexeme, lexeme);
+  }
+  for (i = 0; i < len; i++)
+    if (lexeme[i] == '\n')
+      line++;
+  currentToken.code = ERR_T;
+  return currentToken;
 }
 
 /*
-TO_DO_20: (If necessary): HERE YOU WRITE YOUR ADDITIONAL FUNCTIONS (IF ANY).
+TODO:_20: (If necessary): HERE YOU WRITE YOUR ADDITIONAL FUNCTIONS (IF ANY).
 */

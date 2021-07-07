@@ -7,7 +7,7 @@
 * File name: compilers.c
 * Compiler: MS Visual Studio 2019
 * Author: Paulo Sousa
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013]
+* Course: CST 8152 ï¿½ Compilers, Lab Section: [011, 012, 013]
 * Assignment: A21, A22, A23.
 * Date: May 01 2021
 * Professor: Paulo Sousa
@@ -33,8 +33,8 @@
 * Algorithm: -
 **************************************************************/
 
-sofia_int main(int argc, char** argv) {
-	sofia_int i;
+zz_int main(int argc, char** argv) {
+	zz_int i;
 	if (DEBUG) {
 		for (i = 0; i < argc; ++i)
 			printf("argv[%d] = %s\n", i, argv[i]);
@@ -45,7 +45,7 @@ sofia_int main(int argc, char** argv) {
 			PGM_SCANNER, "] - Scanner, [",
 			PGM_PARSER, "] - Parser\n");
 	}
-	sofia_chr option = argv[1][0];
+	zz_char option = argv[1][0];
 	switch (option) {
 	case PGM_BUFFER:
 		break;

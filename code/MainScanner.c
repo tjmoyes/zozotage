@@ -1,19 +1,19 @@
 /*************************************************************
 * COMPILERS COURSE - Algonquin College
 * Code version: Summer, 2021
-* Author: Svillen Ranev - Paulo Sousa.
+* Author: Svillen Ranev - Paulo Sousa, Jon Liu 040967432, Tyson Moyes 040761903
 *************************************************************
 * File name: MainScanner.c
 * Compiler: MS Visual Studio 2019
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013]
-* Assignment: A2.
+* Course: CST 8152 - Compilers, Lab Section: 013
+* Assignment: A22
 * Date: May 01 2021
 * Professor: Paulo Sousa
 * Purpose: This file is the main code for Scanner (A2)
 * Function list: (...).
 *************************************************************/
 
- /* The #define _CRT_SECURE_NO_WARNINGS should be used in MS Visual Studio projects
+/* The #define _CRT_SECURE_NO_WARNINGS should be used in MS Visual Studio projects
   * to suppress the warnings about using "unsafe" functions like fopen()
   * and standard sting library functions defined in string.h.
   * The define does not have any effect in other compiler projects.
@@ -51,12 +51,12 @@
  */
 
 /* Global objects - variables (used in other codes as external) */
-BufferPointer stringLiteralTable;	/* this buffer implements String Literal Table */
-int errorNumber;			/* run-time error number = 0 by default (ANSI) */
+BufferPointer stringLiteralTable; /* this buffer implements String Literal Table */
+int errorNumber;		  /* run-time error number = 0 by default (ANSI) */
 
 /* External objects */
 extern int line; /* source code line numbers - defined in scanner.c */
-extern short startScanner(Buffer* sc_buf);
+extern zz_int startScanner(Buffer *sc_buf);
 extern Token tokenizer(void);
 
 /*
@@ -64,33 +64,36 @@ extern Token tokenizer(void);
  *  Function declarations
  * -------------------------------------------------------------
  */
-void printScannerError(char* fmt, ...);
-void displayScanner(Buffer* ptrBuffer);
-long getScannerFilesize(char* fname);
+void printScannerError(char *fmt, ...);
+void displayScanner(Buffer *ptrBuffer);
+long getScannerFilesize(char *fname);
 void printToken(Token t);
 
 /*************************************************************
  *  Scanner Main function 
  ************************************************************/
 
-int mainScanner(int argc, char** argv) {
+int mainScanner(int argc, char **argv)
+{
 
-	BufferPointer sourceBuffer;	/* pointer to input (source) buffer */
-	FILE* fileHandler;		/* input file handle */
-	Token currentToken;		/* token produced by the scanner */
-	int loadSize = 0;		/* the size of the file loaded in the buffer */
-	int isAnsiC = !ANSI_C;	/* ANSI C compliancy flag */
+	BufferPointer sourceBuffer; /* pointer to input (source) buffer */
+	FILE *fileHandler;	    /* input file handle */
+	Token currentToken;	    /* token produced by the scanner */
+	int loadSize = 0;	    /* the size of the file loaded in the buffer */
+	int isAnsiC = !ANSI_C;	    /* ANSI C compliancy flag */
 
-/* Check if the compiler option is set to compile ANSI C */
-/* __DATE__, __TIME__, __LINE__, __FILE__, __STDC__ are predefined preprocessor macros*/
-	if (isAnsiC) {
+	/* Check if the compiler option is set to compile ANSI C */
+	/* __DATE__, __TIME__, __LINE__, __FILE__, __STDC__ are predefined preprocessor macros*/
+	if (isAnsiC)
+	{
 		printScannerError("Date: %s  Time: %s", __DATE__, __TIME__);
 		printScannerError("ERROR: Compiler is not ANSI C compliant!\n");
 		exit(EXIT_FAILURE);
 	}
 
 	/*check for correct arrguments - source file name */
-	if (argc <= 2) {
+	if (argc <= 2)
+	{
 		/* __DATE__, __TIME__, __LINE__, __FILE__ are predefined preprocessor macros*/
 		printScannerError("Date: %s  Time: %s", __DATE__, __TIME__);
 		printScannerError("Runtime error at line %d in file %s", __LINE__, __FILE__);
@@ -103,14 +106,16 @@ int mainScanner(int argc, char** argv) {
 	printf("%s%d%s", "[Debug mode: ", DEBUG, "]\n");
 
 	/* create a source code input buffer - multiplicative mode */
-	sourceBuffer = bufferCreate(BUFFER_DEFAULT_SIZE, BUFFER_DEFAULT_INCREMENT, MODE_MULTI);
-	if (sourceBuffer == NULL) {
+	sourceBuffer = bufferCreate(ZZ_DEFAULT_SIZE, ZZ_DEFAULT_INCREMENT, MODE_MULTI);
+	if (sourceBuffer == NULL)
+	{
 		printScannerError("%s%s", argv[1], ": Could not create source buffer");
 		exit(EXIT_FAILURE);
 	}
 
 	/* open source file */
-	if ((fileHandler = fopen(argv[2], "r")) == NULL) {
+	if ((fileHandler = fopen(argv[2], "r")) == NULL)
+	{
 		printScannerError("%s%s%s", argv[0], ": Cannot open file: ", argv[2]);
 		exit(EXIT_FAILURE);
 	}
@@ -124,28 +129,32 @@ int mainScanner(int argc, char** argv) {
 	/* close source file */
 	fclose(fileHandler);
 	/* find the size of the file */
-	if (loadSize == BUFFER_ERROR) {
+	if (loadSize == BUFFER_ERROR)
+	{
 		printf("The input file %s %s\n", argv[2], "is not completely loaded.");
 		printf("Input file size: %ld\n", getScannerFilesize(argv[2]));
 	}
 
 	/* compact and display the source buffer */
 	/* add SEOF to input program buffer*/
-	if (bufferAddChar(sourceBuffer, '\0')) {/* '\0' */ /* EOF */
+	if (bufferAddChar(sourceBuffer, '\0'))
+	{ /* '\0' */ /* EOF */
 		displayScanner(sourceBuffer);
 	}
 
 	/* create string Literal Table */
-	stringLiteralTable = bufferCreate(BUFFER_DEFAULT_SIZE, BUFFER_DEFAULT_INCREMENT, MODE_ADDIT);
-	if (stringLiteralTable == NULL) {
+	stringLiteralTable = bufferCreate(ZZ_DEFAULT_SIZE, ZZ_DEFAULT_INCREMENT, MODE_ADDIT);
+	if (stringLiteralTable == NULL)
+	{
 		printScannerError("%s%s", argv[0], ": Could not create string literals buffer");
 		exit(EXIT_FAILURE);
 	}
 
 	/* Testbed for the scanner */
-    /* add SEOF to input program buffer*/
+	/* add SEOF to input program buffer*/
 	/* Initialize scanner input buffer */
-	if (startScanner(sourceBuffer)) {
+	if (startScanner(sourceBuffer))
+	{
 		printScannerError("%s%s", argv[0], ": Empty program buffer - scanning canceled");
 		exit(EXIT_FAILURE);
 	}
@@ -153,7 +162,8 @@ int mainScanner(int argc, char** argv) {
 	printf("\nScanning source file...\n\n");
 	printf("Token\t\tAttribute\n");
 	printf("----------------------------------\n");
-	do {
+	do
+	{
 		currentToken = tokenizer();
 		printToken(currentToken);
 	} while (currentToken.code != SEOF_T);
@@ -161,12 +171,13 @@ int mainScanner(int argc, char** argv) {
 	/* print String Literal Table if not empty */
 	printf("\nPrinting string table...\n");
 	printf("----------------------------------\n");
-	if (bufferGetOffsetAddC(stringLiteralTable)) bufferPrint(stringLiteralTable);
+	if (bufferGetOffsetAddC(stringLiteralTable))
+		bufferPrint(stringLiteralTable);
 	printf("\n----------------------------------\n");
 	bufferDestroy(sourceBuffer);
 	bufferDestroy(stringLiteralTable);
 	sourceBuffer = stringLiteralTable = NULL;
-	
+
 	/* Ass2 evaluation only */
 	if (argv[3] != NULL && *argv[3] == 'l')
 		printf("The number of lines is: %d\n", line);
@@ -178,39 +189,42 @@ int mainScanner(int argc, char** argv) {
  *  Error printing function with variable number of arguments
 ************************************************************/
 
-void printScannerError(char* fmt, ...) {
+void printScannerError(char *fmt, ...)
+{
 	va_list ap;
 	va_start(ap, fmt);
-		(void)vfprintf(stderr, fmt, ap);
+	(void)vfprintf(stderr, fmt, ap);
 	va_end(ap);
 	/* Move to new line */
 	if (strchr(fmt, '\n') == NULL)
 		fprintf(stderr, "\n");
 }
 
- /*************************************************************
+/*************************************************************
   * The function displays buffer contents
   ************************************************************/
 
-void displayScanner(Buffer* ptrBuffer) {
+void displayScanner(Buffer *ptrBuffer)
+{
 	printf("\nPrinting buffer parameters:\n\n");
 	printf("The capacity of the buffer is:  %d\n", bufferGetSize(ptrBuffer));
 	printf("The current size of the buffer is:  %d\n", bufferGetOffsetAddC(ptrBuffer));
 	printf("\nPrinting buffer contents:\n\n");
 	bufferRewind(ptrBuffer);
 	bufferPrint(ptrBuffer);
-
 }
 
 /*************************************************************
  * The function gets size of scanner file
  ************************************************************/
 
-long getScannerFilesize(char* fname) {
-	FILE* fileInput;
+long getScannerFilesize(char *fname)
+{
+	FILE *fileInput;
 	long fileLength;
 	fileInput = fopen(fname, "r");
-	if (fileInput == NULL) {
+	if (fileInput == NULL)
+	{
 		printScannerError("%s%s", "Cannot open file: ", fname);
 		return 0L;
 	}
@@ -220,17 +234,20 @@ long getScannerFilesize(char* fname) {
 	return fileLength;
 }
 
- /*************************************************************
+/*************************************************************
   * The function prints the token returned by the scanner
   ************************************************************/
 
-void printToken(Token t) {
-	extern char* keywordTable[]; /* link to keyword table in */
-	switch (t.code) {
+void printToken(Token t)
+{
+	extern char *keywordTable[]; /* link to keyword table in */
+	switch (t.code)
+	{
 	case RTE_T:
 		printf("RTE_T\t\t%s", t.attribute.errLexeme);
 		/* Call here run-time error handling component */
-		if (errorNumber) {
+		if (errorNumber)
+		{
 			printf("%d", errorNumber);
 			exit(errorNumber);
 		}
@@ -242,14 +259,8 @@ void printToken(Token t) {
 	case SEOF_T:
 		printf("SEOF_T\t\t%d\t\n", t.attribute.seofType);
 		break;
-	case IVID_T:
-		printf("IVID_T\t\t%s\n", t.attribute.vidLexeme);
-		break;
-	case FVID_T:
-		printf("FPVID_T\t\t%s\n", t.attribute.vidLexeme);
-		break;
-	case SVID_T:
-		printf("SVID_T\t\t%s\n", t.attribute.vidLexeme);
+	case VID_T:
+		printf("VID_T\t\t%s\n", t.attribute.vidLexeme);
 		break;
 	case FPL_T:
 		printf("FPL_T\t\t%f\n", t.attribute.floatValue);
@@ -259,8 +270,8 @@ void printToken(Token t) {
 		break;
 	case STR_T:
 		printf("STR_T\t\t%d\t ", (short)t.attribute.codeType);
-		printf("%s\n", bufferGetSubString(stringLiteralTable, 
-			(short)t.attribute.codeType));
+		printf("%s\n", bufferGetSubString(stringLiteralTable,
+						  (short)t.attribute.codeType));
 		break;
 	case SCC_OP_T:
 		printf("SCC_OP_T\n");
@@ -294,9 +305,6 @@ void printToken(Token t) {
 		break;
 	case COM_T:
 		printf("COM_T\n");
-		break;
-	case EOS_T:
-		printf("EOS_T\n");
 		break;
 	default:
 		printf("Scanner error: invalid token code: %d\n", t.code);
