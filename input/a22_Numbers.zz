@@ -1,0 +1,16 @@
+; Zozotage Example
+; Teste des numeros
+
+(def (entree)
+  (soit/mut i)
+  (soit/mut n)
+  (soit/mut f)
+
+  (imprime("entrez un numero:"))
+  (demande(n))
+
+  (chaque (i)
+    
+  ) tant-que (i<n)
+
+)
