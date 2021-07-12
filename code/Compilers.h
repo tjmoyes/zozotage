@@ -37,7 +37,7 @@ enum PROGRAMS
 Main functions
 ------------------------------------------------------------
 */
-int mainScanner(int argc, char **argv);
+zz_int mainScanner(zz_int argc, zz_char **argv);
 
 /*
 ------------------------------------------------------------

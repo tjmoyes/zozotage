@@ -33,20 +33,24 @@
 * Algorithm: -
 **************************************************************/
 
-zz_int main(int argc, char** argv) {
+zz_int main(zz_int argc, zz_char **argv)
+{
 	zz_int i;
-	if (DEBUG) {
+	if (DEBUG)
+	{
 		for (i = 0; i < argc; ++i)
 			printf("argv[%d] = %s\n", i, argv[i]);
 	}
-	if (argc < 2) {
+	if (argc < 2)
+	{
 		printf("%s%s%c%s%c%s%c%s", argv[0], ": OPTIONS [",
-			PGM_BUFFER, "] - Buffer, [",
-			PGM_SCANNER, "] - Scanner, [",
-			PGM_PARSER, "] - Parser\n");
+		       PGM_BUFFER, "] - Buffer, [",
+		       PGM_SCANNER, "] - Scanner, [",
+		       PGM_PARSER, "] - Parser\n");
 	}
 	zz_char option = argv[1][0];
-	switch (option) {
+	switch (option)
+	{
 	case PGM_BUFFER:
 		break;
 	case PGM_SCANNER:
@@ -56,9 +60,9 @@ zz_int main(int argc, char** argv) {
 		break;
 	default:
 		printf("%s%s%c%s%c%s%c%s", argv[0], ": OPTIONS [",
-			PGM_BUFFER, "] - Buffer, [",
-			PGM_SCANNER, "] - Scanner, [",
-			PGM_PARSER, "] - Parser\n");
+		       PGM_BUFFER, "] - Buffer, [",
+		       PGM_SCANNER, "] - Scanner, [",
+		       PGM_PARSER, "] - Parser\n");
 		break;
 	}
 	return EXIT_SUCCESS;

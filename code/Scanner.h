@@ -44,7 +44,6 @@
 
 #define RTE_CODE 1 /* Value for run-time error */
 
-/* TODO: 2: Define Token codes - Create your token classes - I think this is good*/
 enum TOKENS
 {
   ERR_T,    /* Error token */
@@ -134,8 +133,7 @@ typedef struct Token
 #define CHARSEOF0 '\0'
 #define CHARSEOF255 0xFF
 
-/*  TODO: wtf is this comment?
-    Special case tokens processed separately one by one in the token-driven part of the scanner
+/* Special case tokens processed separately one by one in the token-driven part of the scanner
  *  '=' , ' ' , '(' , ')' , '{' , '}' , == , <> , '>' , '<' , ';', 
  *  white space, @comment@ , ',' , ';' , '-' , '+' , '*' , '/', ## , 
  *  .&., .|. , .!. , SEOF.
@@ -149,13 +147,19 @@ typedef struct Token
 
 /* TODO: 6: Define lexeme FIXED classes */
 /* These constants will be used on nextClass */
-#define CHRCOL2 '_'
-#define CHRCOL3 '.'
-#define CHRCOL4 '#'
-#define CHRCOL5 '%'
-#define CHRCOL6 '$'
-#define CHRCOL7 '\"'
-/* These constants will be used on VID function */
+/* TODO: Not sure if we need CHRCOL 1 or 2 since they are ranges */
+#define CHRCOL1 '-'
+#define CHRCOL2 '1'
+/* Updated these to our values according to table from A21 - TM*/
+#define CHRCOL3 '~'
+#define CHRCOL4 '.'
+#define CHRCOL5 '"'
+#define CHRCOL6 '#'
+/* TODO: not sure if we need this one. */
+/* #define CHRCOL7 '\"' */
+/* These constants will be used on VID function 
+  TODO: Update because I think we are using VID only
+*/
 #define IVIDPREFIX '#'
 #define FVIDPREFIX '%'
 #define SVIDPREFIX '$'
@@ -216,9 +220,7 @@ Automata definitions
 -------------------------------------------------
 */
 
-/* TODO:_10A: Pointer to function (of one char * argument) returning Token 
-    Is this done already? 
-*/
+/* Pointer to function (of one char * argument) returning Token */
 typedef Token (*PTR_ACCFUN)(zz_char *lexeme);
 
 /* Declare accepting states functions */

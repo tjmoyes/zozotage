@@ -54,12 +54,6 @@
 #include "Scanner.h"
 #endif
 
-/*
-----------------------------------------------------------------
-TODO: 12: Global vars definitions
-----------------------------------------------------------------
-*/
-
 /* Global objects - variables */
 /* This buffer is used as a repository for string literals. */
 extern BufferPointer stringLiteralTable; /* String literal table */
@@ -79,7 +73,6 @@ static BufferPointer sourceBuffer; /* pointer to input source buffer */
  * Intitializes scanner
  *		This function initializes the scanner using defensive programming.
  ************************************************************/
-/* TODO: 13: Follow the standard and adjust datatypes */
 zz_int startScanner(BufferPointer psc_buf)
 {
   if (bufferCheckEmpty(psc_buf) == ZZ_TRUE)
@@ -102,9 +95,6 @@ zz_int startScanner(BufferPointer psc_buf)
  ************************************************************/
 Token tokenizer(void)
 {
-
-  /* TODO: 14: Follow the standard and adjust datatypes */
-
   Token currentToken = {0}; /* token to return after pattern recognition. Set all structure members to 0 */
   zz_char c;                /* input symbol */
   zz_int state = 0;         /* initial state of the FSM */
@@ -169,7 +159,7 @@ Token tokenizer(void)
       /* TODO_15C: Other logical operators */
 
     /* Comments */
-    case '@':
+    case ';':
       newc = bufferGetChar(sourceBuffer);
       do
       {
@@ -291,7 +281,7 @@ zz_int nextClass(zz_char c)
 {
   zz_int val = -1;
   /* Adjust the logic to return next column in TT */
-  /*	[A-z](0), [0-9](1), _(2), .(3), #(4), %(5), $(6), "(7), SEOF(8), other(9) */
+  /*	[A-z](0), [-?!+-/*=](1), [0-9](2), ~(3), .(4), "(5), #(6), EOFS(7) */
   switch (c)
   {
   case CHRCOL2:
@@ -309,9 +299,10 @@ zz_int nextClass(zz_char c)
   case CHRCOL6:
     val = 6;
     break;
-  case CHRCOL7:
+  /*case CHRCOL7:
     val = 7;
     break;
+    */
   case CHARSEOF0:
   case CHARSEOF255:
     val = 8;
