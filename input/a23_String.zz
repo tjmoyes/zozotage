@@ -1,0 +1,7 @@
+; Zozotage Example
+; Teste des series
+
+(def(entree)
+  (soit phrase "Bonjour")
+  (imprime(phrase))
+)

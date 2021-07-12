@@ -6,11 +6,18 @@
   (soit/mut n)
   (soit/mut f)
 
-  (imprime("entrez un numero:"))
+  (imprime("Entrez un numero:"))
   (demande(n))
 
   (chaque (i)
-    
+    (change f
+      (f*i)
+    )
+    (change i
+      (i++)
+    )
   ) tant-que (i<n)
 
+  (imprime("Factoriel: "))
+  (imprime(f))
 )
