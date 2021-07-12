@@ -240,7 +240,7 @@ long getScannerFilesize(char *fname)
 
 void printToken(Token t)
 {
-	extern char *keywordTable[]; /* link to keyword table in */
+	extern zz_char *keywordTable[]; /* link to keyword table in */
 	switch (t.code)
 	{
 	case RTE_T:
@@ -273,21 +273,26 @@ void printToken(Token t)
 		printf("%s\n", bufferGetSubString(stringLiteralTable,
 						  (short)t.attribute.codeType));
 		break;
+	/*
 	case SCC_OP_T:
 		printf("SCC_OP_T\n");
 		break;
 	case ASS_OP_T:
 		printf("ASS_OP_T\n");
 		break;
+	*/
 	case ART_OP_T:
 		printf("ART_OP_T\t%d\n", t.attribute.codeType);
 		break;
+	/*
 	case REL_OP_T:
 		printf("REL_OP_T\t%d\n", t.attribute.codeType);
 		break;
+
 	case LOG_OP_T:
 		printf("LOG_OP_T\t%d\n", t.attribute.codeType);
 		break;
+	*/
 	case LPR_T:
 		printf("LPR_T\n");
 		break;
@@ -303,9 +308,11 @@ void printToken(Token t)
 	case KW_T:
 		printf("KW_T\t\t%s\n", keywordTable[t.attribute.codeType]);
 		break;
+	/*
 	case COM_T:
 		printf("COM_T\n");
 		break;
+	*/
 	default:
 		printf("Scanner error: invalid token code: %d\n", t.code);
 	}

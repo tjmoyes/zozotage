@@ -45,7 +45,8 @@ enum BUFFERMODES
 #define ZZ_DEFAULT_INCREMENT 10 /* default increment factor */
 
 /* You should add your own constant definitions here */
-#define ZZ_MAX_SIZE INT_MAX - 1 /*maximum capacity*/
+#define ZZ_MAX_SIZE (INT_MAX - 1) /*maximum capacity*/
+#define ZZ_MIN_SIZE (INT_MIN + 1)
 
 /* Bit masks */
 #define ZZ_DEFAULT_FLAG 0x3F /* 0011 1111 */
@@ -67,7 +68,7 @@ enum BUFFERMODES
  */
 
 typedef int zz_int;
-typedef char zz_char;
+typedef unsigned char zz_char;
 typedef unsigned char zz_flags;
 typedef char zz_bool;
 

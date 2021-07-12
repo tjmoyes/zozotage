@@ -51,17 +51,12 @@ enum TOKENS
   INL_T,    /* Integer literal token */
   FPL_T,    /* Floating point literal token */
   STR_T,    /* String literal token */
-  SCC_OP_T, /* String concatenation operator token: (++) */
-  ASS_OP_T, /* Assignment operator token */
   ART_OP_T, /* Arithmetic operator token */
-  REL_OP_T, /* Relational operator token */
-  LOG_OP_T, /* Logical operator token */
   LPR_T,    /* Left parenthesis token */
   RPR_T,    /* Right parenthesis token */
   LBR_T,    /* Left bracket token */
   RBR_T,    /* Right bracket token */
   KW_T,     /* Keyword token */
-  COM_T,    /* Comma token */
   RTE_T,    /* Run-time error token */
   SEOF_T    /* Source end-of-file token */
 };
@@ -143,47 +138,42 @@ typedef struct Token
 #define ER 13 /* Error state with retract */
 #define IS -1 /* Illegal state */
 
-#define TABLE_COLUMNS 8
+#define TABLE_COLUMNS 9
 
-/* TODO: 6: Define lexeme FIXED classes */
 /* These constants will be used on nextClass */
-/* TODO: Not sure if we need CHRCOL 1 or 2 since they are ranges */
-#define CHRCOL1 '-'
-#define CHRCOL2 '1'
-/* Updated these to our values according to table from A21 - TM*/
+/* CHRCOL2 is a digit for us, which is handled by isdigit in Scanner.c */
+/* Updated these to our values according to table from A21 - TM */
 #define CHRCOL3 '~'
 #define CHRCOL4 '.'
-#define CHRCOL5 '"'
+#define CHRCOL5 '\"'
 #define CHRCOL6 '#'
-/* TODO: not sure if we need this one. */
-/* #define CHRCOL7 '\"' */
-/* These constants will be used on VID function 
-  TODO: Update because I think we are using VID only
-*/
-#define IVIDPREFIX '#'
-#define FVIDPREFIX '%'
-#define SVIDPREFIX '$'
+
+/* Removed VIDPREFIXes as we do not use them */
 
 /* transitionTable based off values from A21 */
+/* We noticed that our transition table in A21 did not include or Z lexeme (other). We've added it here */
+/* Disabled clang autoformatting to make the table ledgible, thanks StackOverflow! */
+/* clang-format off */
 static zz_int transitionTable[][TABLE_COLUMNS] = {
-    /*        [A-z], [-?!+-/*=]  [0-9],  ~,    .,    ",    #,   EOFS 	*/
-    /*	       L(0),    V(1),     D(2), T(3), R(4), Q(5), H(6), E(7)	*/
-    /* S00 */ {1, 1, 3, 2, ES, 8, 10, ER},      /* NOAS */
-    /* S01 */ {1, 1, 1, 2, 2, 2, 2, ER},        /* NOAS */
-    /* S02 */ {IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (VID) */
-    /* S03 */ {4, 4, 3, 4, 5, 4, 4, ER},        /* NOAS */
-    /* S04 */ {IS, IS, IS, IS, IS, IS, IS, IS}, /* ASNR (IL) */
-    /* S05 */ {ES, ES, 6, ES, ES, ES, ES, ER},  /* NOAS */
-    /* S06 */ {7, 7, 6, 7, 7, 7, 7, ER},        /* NOAS */
-    /* S07 */ {IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (FL) */
-    /* S08 */ {8, 8, 8, 8, 8, 9, 8, ER},        /* NOAS */
-    /* S09 */ {IS, IS, IS, IS, IS, IS, IS, IS}, /* ASNR (SL) */
-    /* S10 */ {11, ES, ES, ES, ES, ES, ES, ER}, /* NOAS */
-    /* S11 */ {11, 12, 12, 12, 12, 12, 12, ER}, /* NOAS  */
-    /* S12 */ {IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (KW) */
-    /* S13 */ {IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (ER)   */
-    /* S14 */ {IS, IS, IS, IS, IS, IS, IS, IS}  /* ASNR (ES) */
+    /*        [A-z], [?!+-/*=]  [0-9],  ~,    .,    ",    #,   EOFS, Other 	*/
+    /*	       L(0),    V(1),     D(2), T(3), R(4), Q(5), H(6), E(7), Z(8)	*/
+    /* S00 */ { 1,  1,  3,  2, ES,  8, 10, ER, ES}, /* NOAS */
+    /* S01 */ { 1,  1,  1,  2,  2,  2,  2, ER,  2}, /* NOAS */
+    /* S02 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (VID) */
+    /* S03 */ { 4,  4,  3,  4,  5,  4,  4, ER,  4}, /* NOAS */
+    /* S04 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}, /* ASNR (IL) */
+    /* S05 */ {ES, ES,  6, ES, ES, ES, ES, ER, ES},  /* NOAS */
+    /* S06 */ { 7,  7,  6,  7,  7,  7,  7, ER,  7}, /* NOAS */
+    /* S07 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (FL) */
+    /* S08 */ { 8,  8,  8,  8,  8,  9,  8, ER,  8}, /* NOAS */
+    /* S09 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}, /* ASNR (SL) */
+    /* S10 */ {11, ES, ES, ES, ES, ES, ES, ER, ER}, /* NOAS */
+    /* S11 */ {11, 12, 12, 12, 12, 12, 12, ER, 12}, /* NOAS */
+    /* S12 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (KW) */
+    /* S13 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}, /* ASWR (ER) */
+    /* S14 */ {IS, IS, IS, IS, IS, IS, IS, IS, IS}  /* ASNR (ES) */
 };
+/* clang-format on */
 
 /* CHECK: Define accepting states types */
 #define NOAS 0 /* not accepting state */
@@ -260,19 +250,11 @@ Language keywords
 -------------------------------------------------
 */
 
-#define KWT_SIZE 11
+#define KWT_SIZE 3
 
 static zz_char *keywordTable[KWT_SIZE] = {
-    "soit",
-    "soit/mut",
-    "demande",
-    "imprime",
-    "change",
-    "cond",
-    "sinon",
-    "chaque",
-    "tant-que",
-    "def",
-    "retourne"};
+    "v",
+    "f",
+    "nul"};
 
 #endif

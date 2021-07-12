@@ -2,22 +2,16 @@
 ; Teste des numeros
 
 (def (entree)
-  (soit/mut i)
-  (soit/mut n)
-  (soit/mut f)
+  (soit/mut i 1)
+  (soit/mut n -1)
+  (soit/mut f 1)
 
-  (imprime("Entrez un numero:"))
-  (demande(n))
+  (imprime "Entrez un numero:")
+  (demande n)
 
-  (chaque (i)
-    (change f
-      (f*i)
-    )
-    (change i
-      (i++)
-    )
-  ) tant-que (i<n)
+  (tant-que (moins-que i n)
+    (change f (* f i))
+    (change i (+ i 1)))
 
-  (imprime("Factoriel: "))
-  (imprime(f))
-)
+  (imprime "Factoriel: ")
+  (imprime f))

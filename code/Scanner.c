@@ -114,49 +114,58 @@ Token tokenizer(void)
 			Every token is possessed by its own dedicated code
 			-----------------------------------------------------------------------
 		*/
-
-    /* TODO: 15: All patterns that do not require accepting functions */
     switch (c)
     {
 
-      /* Cases for spaces */
+    /* Cases for spaces */
     case ' ':
+    case '\t':
       break;
     case '\n':
       line++;
       break;
-      /* TODO_15A: See all other elements */
 
-      /* Cases for symbols */
+    /* These are obscure but do exist in ASCII, so may as well have em */
+    case '\r':
+      line++;
+      break;
+    case '\v':
+    case '\f':
+      break;
+
+    /* Cases for symbols */
     case '(':
       currentToken.code = LPR_T;
       return currentToken;
+    case ')':
+      currentToken.code = RPR_T;
+      return currentToken;
+    case '[':
+      currentToken.code = LBR_T;
+      return currentToken;
+    case ']':
+      currentToken.code = RBR_T;
+      return currentToken;
+
     case '+':
-      newc = bufferGetChar(sourceBuffer);
-      if (newc == '+')
-      {
-        currentToken.code = SCC_OP_T;
-        return currentToken;
-      }
-      bufferRetract(sourceBuffer);
+      /* We do not have string concatenation, so the section regarding that was removed */
       currentToken.code = ART_OP_T;
       currentToken.attribute.codeType = ADD;
       return currentToken;
-      /* TODO_15B: See all other elements */
+    case '-':
+      currentToken.code = ART_OP_T;
+      currentToken.attribute.codeType = SUB;
+      return currentToken;
+    case '*':
+      currentToken.code = ART_OP_T;
+      currentToken.attribute.codeType = MUL;
+      return currentToken;
+    case '/':
+      currentToken.code = ART_OP_T;
+      currentToken.attribute.codeType = DIV;
+      return currentToken;
 
-    case '.':
-      /* AND operator */
-      bufferSetOffsetMark(sourceBuffer, bufferGetOffsetGetC(sourceBuffer));
-      if (bufferGetChar(sourceBuffer) == '&' &&
-          bufferGetChar(sourceBuffer) == '.')
-      {
-        currentToken.code = LOG_OP_T;
-        currentToken.attribute.codeType = AND;
-        return currentToken;
-      }
-      else
-        bufferRestore(sourceBuffer);
-      /* TODO_15C: Other logical operators */
+    /* We do not have logic operators, we have functions to handle this, so that section was removed */
 
     /* Comments */
     case ';':
@@ -187,12 +196,10 @@ Token tokenizer(void)
       return currentToken;
 
       /* ------------------------------------------------------------------------
-				Part 2: Implementation of Finite State Machine (DFA) or Transition Table driven Scanner
-				Note: Part 2 must follow Part 1 to catch the illegal symbols
-				-----------------------------------------------------------------------
-			*/
-
-      /* TODO:_16: Adjust / check the logic for your language */
+      Part 2: Implementation of Finite State Machine (DFA) or Transition Table driven Scanner
+      Note: Part 2 must follow Part 1 to catch the illegal symbols
+      -----------------------------------------------------------------------
+      */
 
     default: // general case
       state = nextState(state, c);
@@ -248,8 +255,6 @@ Token tokenizer(void)
 	Once the program is tested thoroughly #define DEBUG is commented out
 	or #undef DEBUF is used - see the top of the file.
  ************************************************************/
-/* TODO: 17: Just change the datatypes */
-
 zz_int nextState(zz_int state, zz_char c)
 {
   zz_int col;
@@ -275,17 +280,21 @@ zz_int nextState(zz_int state, zz_char c)
 	* Considering an input char c, you can identify the "class".
 	* For instance, a letter should return the column for letters, etc.
 ************************************************************/
-/* TODO: 18: Use your column configuration */
-
 zz_int nextClass(zz_char c)
 {
   zz_int val = -1;
-  /* Adjust the logic to return next column in TT */
-  /*	[A-z](0), [-?!+-/*=](1), [0-9](2), ~(3), .(4), "(5), #(6), EOFS(7) */
+
+  /*	[A-z](0), [?!+-/*=](1), [0-9](2), ~(3), .(4), "(5), #(6), EOFS(7), Other(8) */
   switch (c)
   {
-  case CHRCOL2:
-    val = 2;
+  case '?':
+  case '!':
+  case '+':
+  case '-':
+  case '/':
+  case '*':
+  case '=':
+    val = 1;
     break;
   case CHRCOL3:
     val = 3;
@@ -299,21 +308,17 @@ zz_int nextClass(zz_char c)
   case CHRCOL6:
     val = 6;
     break;
-  /*case CHRCOL7:
-    val = 7;
-    break;
-    */
   case CHARSEOF0:
   case CHARSEOF255:
-    val = 8;
+    val = 7;
     break;
   default:
     if (isalpha(c))
       val = 0;
     else if (isdigit(c))
-      val = 1;
+      val = 2;
     else
-      val = 9;
+      val = 8;
   } //switch
   return val;
 }
@@ -328,26 +333,9 @@ zz_int nextClass(zz_char c)
  *    Remember to end each token with the \0.
  *  - Suggestion: Use "strncpy" function.
  ************************************************************/
-/* TODO:_19A: Adjust the function for VID */
 Token funcVID(zz_char lexeme[])
 {
   Token currentToken = {0};
-  switch (lexeme[0])
-  {
-  /* TODO: We only use VID, not specific types. This needs to be altered */
-  case IVIDPREFIX:
-    /* currentToken.code = IVID_T; */
-    break;
-  case FVIDPREFIX:
-    /* currentToken.code = FVID_T; */
-    break;
-  case SVIDPREFIX:
-    /*currentToken.code = SVID_T;*/
-    break;
-  default:
-    currentToken.code = ERR_T;
-    break;
-  }
   strncpy(currentToken.attribute.vidLexeme, lexeme, VID_LEN);
   currentToken.attribute.vidLexeme[VID_LEN] = CHARSEOF0;
   return currentToken;
@@ -356,13 +344,11 @@ Token funcVID(zz_char lexeme[])
 /*************************************************************
  * Acceptance State Function IL
  *		Function responsible to identify IL (integer literals).
- * - It is necessary respect the limit (ex: 2-byte integer in C).
- * - In the case of larger lexemes, error shoul be returned.
+ * - The IL must be withing the bounds of a zz_int.
+ * - A lexeme beyond that is an error.
  * - Only first ERR_LEN characters are accepted and eventually,
  *   additional three dots (...) should be put in the output.
  ************************************************************/
-/* TODO:_19B: Adjust the function for IL */
-
 Token funcIL(zz_char lexeme[])
 {
   Token currentToken = {0};
@@ -374,7 +360,7 @@ Token funcIL(zz_char lexeme[])
   else
   {
     tlong = atol(lexeme);
-    if (tlong >= 0 && tlong <= SHRT_MAX)
+    if (tlong >= 0 && tlong <= ZZ_MAX_SIZE)
     {
       currentToken.code = INL_T;
       currentToken.attribute.intValue = (zz_int)tlong;
@@ -388,14 +374,14 @@ Token funcIL(zz_char lexeme[])
 }
 
 /*************************************************************
- * Acceptance State Function FPL
- *		Function responsible to identify FPL (float point literals).
+ * Acceptance State Function FL
+ *		Function responsible to identify FL (float point literals).
  * - It is necessary respect the limit (ex: 4-byte integer in C).
  * - In the case of larger lexemes, error shoul be returned.
  * - Only first ERR_LEN characters are accepted and eventually,
  *   additional three dots (...) should be put in the output.
  ************************************************************/
-/* TODO:_19C: Adjust the function for FPL */
+/* TODO:_19C: Adjust the function for FL */
 
 Token funcFL(zz_char lexeme[])
 {
@@ -506,7 +492,3 @@ Token funcErr(zz_char lexeme[])
   currentToken.code = ERR_T;
   return currentToken;
 }
-
-/*
-TODO:_20: (If necessary): HERE YOU WRITE YOUR ADDITIONAL FUNCTIONS (IF ANY).
-*/

@@ -8,7 +8,7 @@
             "name": "Make and gdb",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/zz_compiler.exe",
+            "program": "${workspaceFolder}/zz_compiler",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

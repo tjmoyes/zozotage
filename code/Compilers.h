@@ -37,7 +37,7 @@ enum PROGRAMS
 Main functions
 ------------------------------------------------------------
 */
-zz_int mainScanner(zz_int argc, zz_char **argv);
+int mainScanner(int argc, char **argv);
 
 /*
 ------------------------------------------------------------
@@ -47,7 +47,7 @@ Data types definitions
 
 typedef int zz_int;
 typedef long zz_lng;
-typedef char zz_char;
+typedef unsigned char zz_char;
 typedef unsigned char zz_flags;
 typedef char zz_bool;
 typedef float zz_flt;
