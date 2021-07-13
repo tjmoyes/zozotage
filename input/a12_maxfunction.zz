@@ -1,8 +1,9 @@
 ; trouver le maximum de la liste de chiffres positifs
 (def (max ~ chiffres)
   (soit/mut max-temp 0)
+  
   (chaque ([n chiffres])
     (cond [(plus-que n max-temp)
-            (change max-temp n)]))
+      (change max-temp n)]))
   (imprime max-temp " est le maximum")
   (retourne max-temp))

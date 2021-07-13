@@ -33,9 +33,11 @@ Tyson Moyes
 
 
 # NOTE
-If recompiling, MainBuffer.c throws a warning about expecting a long unsigned int but receiving a type 'zz_int'; we are instructed not to change MainBuffer.c, however, so it shall remain. 
+* If recompiling, MainBuffer.c throws a warning about expecting a long unsigned int but receiving a type 'zz_int'; we are instructed not to change MainBuffer.c, however, so it shall remain. 
 
 ```bash
 code/MainBuffer.c: In function ‘displayBuffer’:
 code/MainBuffer.c:201:52: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 2 has type ‘zz_int’ {aka ‘int’} [-Wformat=]
 ```
+
+* There is currently a bug with the ~ character not properly being parsed, leading to an infinite loop when reading a24_General. We were not able to resolve this bug in time for A22 submission. This bug may also cause an infinite loop from the script (it does on Linux as far as I can tell - TM), so you may need to control C after a couple of seconds. 
