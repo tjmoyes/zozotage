@@ -173,7 +173,7 @@ Token tokenizer(void)
       do
       {
         c = bufferGetChar(sourceBuffer);
-        if (c == CHARSEOF0 || c == CHARSEOF255)
+        if (c == CHARSEOF0 || c == CHARSEOF255 || c == '(')
         {
           bufferRetract(sourceBuffer);
           //return currentToken;
@@ -182,7 +182,7 @@ Token tokenizer(void)
         {
           line++;
         }
-      } while (c != ';' && c != CHARSEOF0 && c != CHARSEOF255);
+      } while (c != ';' && c != CHARSEOF0 && c != CHARSEOF255 && c != '(');
       break;
 
     /* Cases for END OF FILE */
