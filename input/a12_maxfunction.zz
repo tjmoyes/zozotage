@@ -2,7 +2,7 @@
 (def (max ~ chiffres)
   (soit/mut max-temp 0)
   (chaque ([n chiffres])
-    (cond [(> n max-temp)
+    (cond [(plus-que n max-temp)
             (change max-temp n)]))
   (imprime max-temp " est le maximum")
   (retourne max-temp))

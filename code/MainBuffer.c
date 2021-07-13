@@ -5,7 +5,7 @@
 *************************************************************
 * File name: MainBuffer.c
 * Compiler: MS Visual Studio 2019
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013]
+* Course: CST 8152 ï¿½ Compilers, Lab Section: [011, 012, 013]
 * Assignment: A1.
 * Date: May 01 2021
 * Professor: Paulo Sousa
@@ -198,7 +198,7 @@ void displayBuffer(Buffer* ptr_Buffer) {
 		bufferGetOffsetAddC(ptr_Buffer));
 	printf("The operational mode of the buffer is: %c\n", 
 		bufferGetMode(ptr_Buffer));
-	printf("The increment factor of the buffer is:  %lu\n", 
+	printf("The increment factor of the buffer is:  %d\n", 
 		bufferGetIncrement(ptr_Buffer));
 	printf("The first symbol in the buffer is:  %c\n", 
 		bufferGetOffsetAddC(ptr_Buffer) ? *bufferGetSubString(ptr_Buffer, 0) : ' ');
@@ -208,7 +208,7 @@ void displayBuffer(Buffer* ptr_Buffer) {
 	bufferRewind(ptr_Buffer);
 	if (!bufferPrint(ptr_Buffer))
 		printf("empty buffer\n");
-
+ 
 }
 
 /*************************************************************

@@ -112,7 +112,7 @@ Token tokenizer(void)
     /* ------------------------------------------------------------------------
 			Part 1: Implementation of token driven scanner.
 			Every token is possessed by its own dedicated code
-			-----------------------------------------------------------------------
+			-------------------------------------------Sca---------------------------
 		*/
     switch (c)
     {
@@ -182,7 +182,7 @@ Token tokenizer(void)
         {
           line++;
         }
-      } while (c != '@' && c != CHARSEOF0 && c != CHARSEOF255);
+      } while (c != ';' && c != CHARSEOF0 && c != CHARSEOF255);
       break;
 
     /* Cases for END OF FILE */
@@ -381,8 +381,6 @@ Token funcIL(zz_char lexeme[])
  * - Only first ERR_LEN characters are accepted and eventually,
  *   additional three dots (...) should be put in the output.
  ************************************************************/
-/* TODO:_19C: Adjust the function for FL */
-
 Token funcFL(zz_char lexeme[])
 {
   Token currentToken = {0};
@@ -407,8 +405,6 @@ Token funcFL(zz_char lexeme[])
  *   this structure, using offsets. Remember to include \0 to
  *   separate the lexemes. Remember also to incremente the line.
  ************************************************************/
-/* TODO:_19D: Adjust the function for SL */
-
 Token funcSL(zz_char lexeme[])
 {
   Token currentToken = {0};
@@ -441,8 +437,6 @@ Token funcSL(zz_char lexeme[])
  * This function checks if one specific lexeme is a keyword.
  * - Tip: Remember to use the keywordTable to check the keywords.
  ************************************************************/
-/* TODO:_19E: Adjust the function for Keywords */
-
 Token funcKW(zz_char lexeme[])
 {
   Token currentToken = {0};
@@ -470,8 +464,6 @@ Token funcKW(zz_char lexeme[])
  *   limit defined. The error lexeme contains line terminators,
  *   so remember to increment line.
  ************************************************************/
-/* TODO:_19F: Adjust the function for Errors */
-
 Token funcErr(zz_char lexeme[])
 {
   Token currentToken = {0};

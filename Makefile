@@ -26,4 +26,4 @@ MainScanner.o : code/MainScanner.c code/Scanner.h code/Buffer.h
 
 .PHONY : clean
 clean:
-	-rm zz_compiler $(OBJS)
+	-rm zz_compiler $(OBJS) output/*

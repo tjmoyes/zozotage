@@ -20,6 +20,7 @@ Jon Liu
 * Edited a22_Numbers.zz to more properly match language style
 * Adjusted types
 * Implemented transition table
+* Finished accepting state functions
 * Generally helped implement functionality
 
 Tyson Moyes

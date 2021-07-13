@@ -95,7 +95,6 @@ BufferPointer bufferCreate(zz_int size, zz_int increment, zz_int mode)
 *   ch = char to be added
 * Return value: bPointer (pointer to Buffer)
 **************************************************************/
-
 BufferPointer bufferAddChar(BufferPointer const pBuffer, zz_char ch)
 {
 	zz_char *tempbuf;

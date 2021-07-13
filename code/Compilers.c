@@ -33,7 +33,7 @@
 * Algorithm: -
 **************************************************************/
 
-zz_int main(zz_int argc, zz_char **argv)
+zz_int main(int argc, char **argv)
 {
 	zz_int i;
 	if (DEBUG)
