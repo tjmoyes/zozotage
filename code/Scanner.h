@@ -152,10 +152,10 @@ typedef struct Token
 
 /* transitionTable based off values from A21 */
 /* We noticed that our transition table in A21 did not include or Z lexeme (other). We've added it here */
-/* Disabled clang autoformatting to make the table ledgible, thanks StackOverflow! */
+/* Disabled clang autoformatting to make the table legible, thanks StackOverflow! */
 /* clang-format off */
 static zz_int transitionTable[][TABLE_COLUMNS] = {
-    /*        [A-z], [?!+-/*=]  [0-9],  ~,    .,    ",    #,   EOFS, Other 	*/
+    /*        [A-z], [?!+-/*=]   [0-9],  ~,    .,    ",    #,   EOFS, Other 	*/
     /*	       L(0),    V(1),     D(2), T(3), R(4), Q(5), H(6), E(7), Z(8)	*/
     /* S00 */ { 1,  1,  3,  2, ES,  8, 10, ER, ES}, /* NOAS */
     /* S01 */ { 1,  1,  1,  2,  2,  2,  2, ER,  2}, /* NOAS */
@@ -253,8 +253,8 @@ Language keywords
 #define KWT_SIZE 3
 
 static zz_char *keywordTable[KWT_SIZE] = {
-    "v",
-    "f",
-    "nul"};
+    "#f",
+    "#v",
+    "#nul"};
 
 #endif
