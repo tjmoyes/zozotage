@@ -176,13 +176,14 @@ Token tokenizer(void)
         if (c == CHARSEOF0 || c == CHARSEOF255 || c == '(')
         {
           bufferRetract(sourceBuffer);
-          //return currentToken;
+          /* return currentToken; */
         }
         else if (c == '\n')
         {
           line++;
+          break;
         }
-      } while (c != ';' && c != CHARSEOF0 && c != CHARSEOF255 && c != '(');
+      } while (c != CHARSEOF0 && c != CHARSEOF255 && c != '(');
       break;
 
     /* Cases for END OF FILE */
@@ -201,7 +202,7 @@ Token tokenizer(void)
       -----------------------------------------------------------------------
       */
 
-    default: // general case
+    default: /* general case */
       state = nextState(state, c);
       lexStart = bufferGetOffsetGetC(sourceBuffer) - 1;
       bufferSetOffsetMark(sourceBuffer, lexStart);
@@ -227,11 +228,9 @@ Token tokenizer(void)
       currentToken = (*finalStateTable[state])(bufferGetSubString(lexemeBuffer, 0));
       bufferDestroy(lexemeBuffer);
       return currentToken;
-    } // switch
-
-  } //while
-
-} // tokenizer
+    }
+  }
+}
 
 /*************************************************************
  * Get Next State
@@ -319,7 +318,7 @@ zz_int nextClass(zz_char c)
       val = 2;
     else
       val = 8;
-  } //switch
+  }
   return val;
 }
 
@@ -336,6 +335,7 @@ zz_int nextClass(zz_char c)
 Token funcVID(zz_char lexeme[])
 {
   Token currentToken = {0};
+  currentToken.code = VID_T;
   strncpy(currentToken.attribute.vidLexeme, lexeme, VID_LEN);
   currentToken.attribute.vidLexeme[VID_LEN] = CHARSEOF0;
   return currentToken;
@@ -466,6 +466,7 @@ Token funcKW(zz_char lexeme[])
  ************************************************************/
 Token funcErr(zz_char lexeme[])
 {
+  /* TODO: trace funcErr calls to see why there's so much ERR_T */
   Token currentToken = {0};
   zz_int i = 0, len = (zz_int)strlen(lexeme);
   if (len > ERR_LEN)
