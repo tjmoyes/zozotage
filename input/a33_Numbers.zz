@@ -1,0 +1,17 @@
+; Zozotage Example
+; Teste des numeros
+
+(def (entree)
+  (soit/mut i 1)
+  (soit/mut n -1)
+  (soit/mut f 1)
+
+  (imprime "Entrez un numero:")
+  (demande n)
+
+  (tant-que (moins-que i n)
+    (change f (* f i))
+    (change i (+ i 1)))
+
+  (imprime "Factoriel: ")
+  (imprime f))
