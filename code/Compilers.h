@@ -25,8 +25,7 @@
 Buffer Modes
 ------------------------------------------------------------
 */
-enum PROGRAMS
-{
+enum PROGRAMS {
 	PGM_BUFFER = '0',
 	PGM_SCANNER = '1',
 	PGM_PARSER = '2'
@@ -37,7 +36,7 @@ enum PROGRAMS
 Main functions
 ------------------------------------------------------------
 */
-int mainScanner(int argc, char **argv);
+int mainParser(int argc, char** argv);
 
 /*
 ------------------------------------------------------------
@@ -45,13 +44,14 @@ Data types definitions
 ------------------------------------------------------------
 */
 
-typedef int zz_int;
-typedef long zz_lng;
-typedef unsigned char zz_char;
-typedef unsigned char zz_flags;
-typedef char zz_bool;
-typedef float zz_flt;
-typedef double zz_dbl;
-typedef void zz_nul;
+// TO_DO_1: Define your typedefs!
+typedef int				zz_int;
+typedef long			zz_lng;
+typedef unsigned char	zz_chr;
+typedef unsigned char	zz_flg;
+typedef char			zz_bool;
+typedef float			zz_flt;
+typedef double			zz_dbl;
+typedef void			zz_nul;
 
 #endif
