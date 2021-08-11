@@ -288,7 +288,7 @@ zz_nul outputStatement()
 	matchToken(LPR_T, NO_ATTR);
 	outputVariableList();
 	matchToken(RPR_T, NO_ATTR);
-	matchToken(EOS_T, NO_ATTR);
+	//matchToken(EOS_T, NO_ATTR);
 	printf("%s%s\n", STR_LANGNAME, ": Output statement parsed");
 }
 
