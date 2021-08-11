@@ -5,8 +5,9 @@
 * File name: Parser.h
 * Compiler: MS Visual Studio 2019
 * Author: Svillen Ranev - Paulo Sousa
-* Course: CST 8152 – Compilers, Lab Section: [011, 012, 013]
-* Assignment: A3.
+* Contributors: Jon Liu 040967432, Tyson Moyes 040761903
+* Course: CST 8152 - Compilers, Lab Section: 013
+* Assignment: A32.
 * Date: May 01 2021
 * Purpose: This file is the main header for Parser (.h)
 * Function list: (...).
@@ -33,18 +34,18 @@
 
 /* Global vars */
 static Token lookahead;
-sofia_int syntaxErrorNumber = 0;
-extern Buffer* stringLiteralTable;
-extern sofia_int line;
+zz_int syntaxErrorNumber = 0;
+extern Buffer *stringLiteralTable;
+extern zz_int line;
 extern Token tokenizer();
-extern sofia_chr* keywordTable[];
+extern zz_char *keywordTable[];
 
-/* TO_DO: Define the name of your language */
-#define STR_LANGNAME "Sofia"
+#define STR_LANGNAME "Zozotage"
 
 /* TO_DO: Create ALL constants for keywords (sequence given in table.h) */
 /* Constants */
-enum KEYWORDS {
+enum KEYWORDS
+{
 	NO_ATTR = -1,
 	MAIN,
 	DATA,
@@ -62,70 +63,68 @@ enum KEYWORDS {
 	/* TO_DO: Continue with your keywords */
 };
 
-/* TO_DO: Update the typedefs used in your language */
-
 /* Function definitions */
-sofia_nul startParser();
-sofia_nul matchToken(sofia_int, sofia_int);
-sofia_nul syncErrorHandler(sofia_int);
-sofia_nul printError();
+zz_nul startParser();
+zz_nul matchToken(sofia_int, sofia_int);
+zz_nul syncErrorHandler(sofia_int);
+zz_nul printError();
 
 /* TODO: Place ALL non-terminal function declarations */
-sofia_nul additiveArithmeticExpression();
-sofia_nul additiveArithmeticExpressionPrime();
-sofia_nul arithmeticExpression();
-sofia_nul assignmentExpression();
-sofia_nul assignmentStatement();
-sofia_nul codeSession();
-sofia_nul conditionalExpression();
-sofia_nul dataSession();
-sofia_nul fltVariableIdentifier();
-sofia_nul fltVarList();
-sofia_nul fltVarListPrime();
-sofia_nul inputStatement();
-sofia_nul intVariableIdentifier();
-sofia_nul intVarList();
-sofia_nul intVarListPrime();
-sofia_nul iterationStatement();
-sofia_nul logicalAndExpression();
-sofia_nul logicalAndExpressionPrime();
-sofia_nul logicalNotExpression();
-sofia_nul logicalOrExpression();
-sofia_nul logicalOrExpressionPrime();
-sofia_nul multiplicativeArithmeticExpression();
-sofia_nul multiplicativeArithmeticExpressionPrime();
-sofia_nul fltVarListDeclaration();
-sofia_nul intVarListDeclaration();
-sofia_nul strVarListDeclaration();
-sofia_nul optVarListDeclarations();
-sofia_nul optionalStatements();
-sofia_nul outputStatement();
-sofia_nul outputVariableList();
-sofia_nul primaryArithmeticExpression();
-sofia_nul primaryRelationalArithmeticExpression();
-sofia_nul primaryRelationalStringExpression();
-sofia_nul primaryStringExpression();
-sofia_nul program();
-sofia_nul relationalArithmeticExpression();
-sofia_nul relationalArithmeticOperator();
-sofia_nul relationalExpression();
-sofia_nul relationalStringExpression();
-sofia_nul relationalStringOperator();
-sofia_nul selectionStatement();
-sofia_nul statement();
-sofia_nul statements();
-sofia_nul statementsPrime();
-sofia_nul stringExpression();
-sofia_nul stringExpressionPrime();
-sofia_nul strVariableIdentifier();
-sofia_nul strVarList();
-sofia_nul strVarListPrime();
-sofia_nul variableIdentifier();
-sofia_nul variableList();
-sofia_nul variableListPrime();
-sofia_nul varListDeclarations();
-sofia_nul varListDeclaration();
-sofia_nul varListDeclarationsPrime();
+zz_nul additiveArithmeticExpression();
+zz_nul additiveArithmeticExpressionPrime();
+zz_nul arithmeticExpression();
+zz_nul assignmentExpression();
+zz_nul assignmentStatement();
+zz_nul codeSession();
+zz_nul conditionalExpression();
+zz_nul dataSession();
+zz_nul fltVariableIdentifier();
+zz_nul fltVarList();
+zz_nul fltVarListPrime();
+zz_nul inputStatement();
+zz_nul intVariableIdentifier();
+zz_nul intVarList();
+zz_nul intVarListPrime();
+zz_nul iterationStatement();
+zz_nul logicalAndExpression();
+zz_nul logicalAndExpressionPrime();
+zz_nul logicalNotExpression();
+zz_nul logicalOrExpression();
+zz_nul logicalOrExpressionPrime();
+zz_nul multiplicativeArithmeticExpression();
+zz_nul multiplicativeArithmeticExpressionPrime();
+zz_nul fltVarListDeclaration();
+zz_nul intVarListDeclaration();
+zz_nul strVarListDeclaration();
+zz_nul optVarListDeclarations();
+zz_nul optionalStatements();
+zz_nul outputStatement();
+zz_nul outputVariableList();
+zz_nul primaryArithmeticExpression();
+zz_nul primaryRelationalArithmeticExpression();
+zz_nul primaryRelationalStringExpression();
+zz_nul primaryStringExpression();
+zz_nul program();
+zz_nul relationalArithmeticExpression();
+zz_nul relationalArithmeticOperator();
+zz_nul relationalExpression();
+zz_nul relationalStringExpression();
+zz_nul relationalStringOperator();
+zz_nul selectionStatement();
+zz_nul statement();
+zz_nul statements();
+zz_nul statementsPrime();
+zz_nul stringExpression();
+zz_nul stringExpressionPrime();
+zz_nul strVariableIdentifier();
+zz_nul strVarList();
+zz_nul strVarListPrime();
+zz_nul variableIdentifier();
+zz_nul variableList();
+zz_nul variableListPrime();
+zz_nul varListDeclarations();
+zz_nul varListDeclaration();
+zz_nul varListDeclarationsPrime();
 //sofia_nul preCondition();
 
 #endif
