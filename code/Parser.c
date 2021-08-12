@@ -70,7 +70,6 @@ zz_nul matchToken(zz_int tokenCode, zz_int tokenAttribute)
 /*************************************************************
  * Syncronize Error Handler
  ************************************************************/
-/* TODO: This is the function to handler error - adjust basically datatypes */
 zz_nul syncErrorHandler(zz_int syncTokenCode)
 {
 	printError();
@@ -88,7 +87,6 @@ zz_nul syncErrorHandler(zz_int syncTokenCode)
 /*************************************************************
  * Print Error
  ************************************************************/
-/* TODO: This is the function to error printing - adjust basically datatypes */
 zz_nul printError()
 {
 	Token t = lookahead;
@@ -113,6 +111,8 @@ zz_nul printError()
 	case RPR_T:
 	case LBR_T:
 	case RBR_T:
+		printf("NA\n");
+		break;
 	//case EOS_T:
 	//	printf("NA\n");
 	//	break;
@@ -124,21 +124,20 @@ zz_nul printError()
 
 /*************************************************************
  * Program statement
- * BNF: <program> -> PLATYPUS { <opt_statements> }
- * FIRST(<program>)= {KW_T (MAIN)}.
+ * BNF: <program> -> (def (entree) <opt_statements>)
+ * FIRST(<program>)= {LPR_T}.
  ************************************************************/
 zz_nul program()
 {
 	switch (lookahead.code)
 	{
-	case KW_T:
-		if (lookahead.attribute.codeType == MAIN)
+	case LPR_T:
+		if (lookahead.attribute.codeType == STR_T)
 		{
-			matchToken(KW_T, MAIN);
-			matchToken(LBR_T, NO_ATTR);
+			matchToken(LPR_T, NO_ATTR);
 			dataSession();
 			codeSession();
-			matchToken(RBR_T, NO_ATTR);
+			matchToken(RPR_T, NO_ATTR);
 			break;
 		}
 		else
@@ -153,6 +152,8 @@ zz_nul program()
 	printf("%s%s\n", STR_LANGNAME, ": Program parsed");
 }
 
+//TODO: Do we need this?
+
 /*************************************************************
  * dataSession
  * BNF: <dataSession> -> DATA { <opt_varlist_declarations> }
@@ -160,7 +161,7 @@ zz_nul program()
  ************************************************************/
 zz_nul dataSession()
 {
-	matchToken(KW_T, DATA);
+	//matchToken(KW_T, DATA);
 	matchToken(LBR_T, NO_ATTR);
 	optVarListDeclarations();
 	matchToken(RBR_T, NO_ATTR);
@@ -186,7 +187,7 @@ zz_nul optVarListDeclarations()
  ************************************************************/
 zz_nul codeSession()
 {
-	matchToken(KW_T, CODE);
+	//matchToken(KW_T, CODE);
 	matchToken(LBR_T, NO_ATTR);
 	optionalStatements();
 	matchToken(RBR_T, NO_ATTR);
@@ -198,8 +199,7 @@ zz_nul codeSession()
 /*************************************************************
  * Optional statement
  * BNF: <opt_statements> -> <statements> | ϵ
- * FIRST(<opt_statements>) = { ϵ , IVID_T, FVID_T, SVID_T, KW_T(IF),
- *				KW_T(WHILE), KW_T(READ), KW_T(WRITE) }
+ * FIRST(<opt_statements>) = { LPR_T, ϵ }
  ************************************************************/
 zz_nul optionalStatements()
 { // TO_DO: Basic implementation
@@ -219,8 +219,7 @@ zz_nul optionalStatements()
 /*************************************************************
  * Statements
  * BNF: <statements> -> <statement><statementsPrime>
- * FIRST(<statements>) = { IVID_T, FVID_T, SVID_T, KW_T(IF),
- *		KW_T(WHILE), KW_T(READ), KW_T(WRITE) }
+ * FIRST(<statements>) = { LPR_T }
  ************************************************************/
 zz_nul statements()
 {
@@ -231,9 +230,8 @@ zz_nul statements()
 
 /*************************************************************
  * Statements Prime
- * BNF: <statementsPrime>  <statement><statementsPrime> | ϵ
- * FIRST(<statementsPrime>) = { ϵ , IVID_T, FVID_T, SVID_T, 
- *		KW_T(IF), KW_T(WHILE), KW_T(READ), KW_T(WRITE) }
+ * BNF: <statementsPrime> -> <statement><statementsPrime> | ϵ
+ * FIRST(<statementsPrime>) = { LPR_T, ϵ }
  ************************************************************/
 zz_nul statementsPrime()
 {
@@ -252,10 +250,8 @@ zz_nul statementsPrime()
 
 /*************************************************************
  * Single statement
- * BNF: <statement> ->  <assignment statement> | <selection statement> |
- *	<iteration statement> | <input statement> | <output statement>
- * FIRST(<statement>) = { IVID_T, FVID_T, SVID_T, KW_T(IF), KW_T(WHILE),
- *			KW_T(READ), KW_T(WRITE) }
+ * BNF: <statement> -> <conditional expr> | <iteration expr> | <function expr>
+ * FIRST(<statement>) = { LPR_T }
  ************************************************************/
 zz_nul statement()
 {
@@ -284,7 +280,7 @@ zz_nul statement()
  ************************************************************/
 zz_nul outputStatement()
 {
-	matchToken(KW_T, WRITE);
+	matchToken(STR_T, NO_ATTR);
 	matchToken(LPR_T, NO_ATTR);
 	outputVariableList();
 	matchToken(RPR_T, NO_ATTR);
@@ -294,7 +290,7 @@ zz_nul outputStatement()
 
 /*************************************************************
  * Output Variable List
- * BNF: <opt_variable list> -> <variable list> | ϵ
+ * BNF: <opt_variable list> -> <VID_T> | ϵ
  * FIRST(<opt_variable_list>) = { IVID_T, FVID_T, SVID_T, ϵ }
  ************************************************************/
 zz_nul outputVariableList()
