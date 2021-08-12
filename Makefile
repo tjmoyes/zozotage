@@ -3,7 +3,7 @@
 # Course: CST 8152 - Compilers, Lab Section: 013
 # Purpose: Create the executable for the compiler
 
-OBJS = Compilers.o Buffer.o MainBuffer.o Scanner.o MainScanner.o
+OBJS = Compilers.o Buffer.o MainBuffer.o Scanner.o MainScanner.o Parser.o MainParser.o
 CFLAGS = -g -Wall -Wextra -ansi -pedantic
 CC = cc
 
@@ -19,10 +19,16 @@ Compilers.o : code/Compilers.c code/Compilers.h
 	$(CC) -o Compilers.o -c code/Compilers.c
 MainBuffer.o : code/MainBuffer.c code/Buffer.h
 	$(CC) -o MainBuffer.o -c code/MainBuffer.c
+
 Scanner.o : code/Scanner.c code/Scanner.h code/Compilers.h
 	$(CC) -o Scanner.o -c code/Scanner.c
 MainScanner.o : code/MainScanner.c code/Scanner.h code/Buffer.h
 	$(CC) -o MainScanner.o -c code/MainScanner.c
+
+Parser.o : code/Parser.c code/Parser.h code/Compilers.h code/Buffer.h code/Scanner.h
+	$(CC) -o Parser.o -c code/Parser.c
+MainParser.o : code/MainParser.c code/Compilers.h code/Buffer.h code/Scanner.h
+	$(CC) -o MainParser.o -c code/MainParser.c
 
 .PHONY : clean
 clean:
