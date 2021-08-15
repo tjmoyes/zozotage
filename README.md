@@ -30,6 +30,9 @@ Tyson Moyes
 * Edited testing script for Linux and Windows
 * Generally helped implement functionality
 
+# A32 Test
+* Parser is not fully functional. You can run either zz_A32.bat or zz_A32.sh, and check the output but it is broken. 
+
 
 
 # NOTE
