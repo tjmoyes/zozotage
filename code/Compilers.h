@@ -38,6 +38,8 @@ Main functions
 ------------------------------------------------------------
 */
 int mainParser(int argc, char **argv);
+int mainScanner(int argc, char **argv);
+int mainBuffer(int argc, char **argv);
 
 /*
 ------------------------------------------------------------
@@ -45,7 +47,6 @@ Data types definitions
 ------------------------------------------------------------
 */
 
-// TO_DO_1: Define your typedefs!
 typedef int zz_int;
 typedef long zz_lng;
 typedef unsigned char zz_char;

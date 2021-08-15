@@ -108,9 +108,9 @@ typedef struct VidAttibutes
   zz_flags flags; /* Flags information */
   union
   {
-    zz_int intValue;       /* Integer value */
-    zz_flt floatValue;     /* Float value */
-    zz_nul *stringContent; /* String value */
+    zz_int intValue;        /* Integer value */
+    zz_flt floatValue;      /* Float value */
+    zz_char *stringContent; /* String value */
   } values;
 } VidAttibutes;
 

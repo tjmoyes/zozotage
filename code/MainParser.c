@@ -71,7 +71,7 @@ extern int line; /* source code line number - defined in scanner.c */
 
 /* Function declarations (prototypes) */
 extern void startParser(void);
-extern short startScanner(BufferPointer sc_buf);
+extern zz_int startScanner(BufferPointer sc_buf);
 
 static void printParserError(char *fmt, ...);
 static void displayParser(BufferPointer ptrBuffer);

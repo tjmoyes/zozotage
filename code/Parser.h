@@ -57,81 +57,16 @@ zz_nul matchToken(zz_int, zz_int);
 zz_nul syncErrorHandler(zz_int);
 zz_nul printError();
 
-/* list of nonterminals in the grammar
-program
-opt_statements
-statements
-statementsPrime
-statement
-conditionalExpr
-branches
-branch
-opt_branches
-opt_elsebranch
-elsebranch
-iterationStatement
-functionExpr
-opt_args
-args
-argsPrime
-arg
-*/
-
-/* TODO: Place ALL non-terminal function declarations */
-//zz_nul additiveArithmeticExpression();
-//zz_nul additiveArithmeticExpressionPrime();
-//zz_nul arithmeticExpression();
-zz_nul assignmentExpression();
-zz_nul assignmentStatement();
-zz_nul codeSession(); // not sure
-zz_nul conditionalExpression();
-zz_nul dataSession(); // not sure
-//zz_nul fltVariableIdentifier();
-//zz_nul fltVarList();
-//zz_nul fltVarListPrime();
-zz_nul inputStatement();
-//zz_nul intVariableIdentifier();
-//zz_nul intVarList();
-//zz_nul intVarListPrime();
-zz_nul iterationStatement();
-//zz_nul logicalAndExpression();
-//zz_nul logicalAndExpressionPrime();
-//zz_nul logicalNotExpression();
-//zz_nul logicalOrExpression();
-//zz_nul logicalOrExpressionPrime();
-//zz_nul multiplicativeArithmeticExpression();
-//zz_nul multiplicativeArithmeticExpressionPrime();
-//zz_nul fltVarListDeclaration();
-//zz_nul intVarListDeclaration();
-//zz_nul strVarListDeclaration();
-//zz_nul optVarListDeclarations();
-zz_nul optionalStatements();
-zz_nul outputStatement();
-zz_nul outputVariableList();
-//zz_nul primaryArithmeticExpression();
-//zz_nul primaryRelationalArithmeticExpression();
-//zz_nul primaryRelationalStringExpression();
-//zz_nul primaryStringExpression();
+/* zz non-terminals */
 zz_nul program();
-//zz_nul relationalArithmeticExpression();
-//zz_nul relationalArithmeticOperator();
-//zz_nul relationalExpression();
-//zz_nul relationalStringExpression();
-//zz_nul relationalStringOperator();
-zz_nul selectionStatement();
-zz_nul statement();
+zz_nul opt_statements();
 zz_nul statements();
 zz_nul statementsPrime();
-//zz_nul stringExpression();
-//zz_nul stringExpressionPrime();
-//zz_nul strVariableIdentifier();
-//zz_nul strVarList();
-//zz_nul strVarListPrime();
-zz_nul variableIdentifier();
-zz_nul variableList();
-zz_nul variableListPrime();
-zz_nul varListDeclarations();
-zz_nul varListDeclaration();
-zz_nul varListDeclarationsPrime();
+zz_nul statement();
+zz_nul functionExpr();
+zz_nul opt_args();
+zz_nul args();
+zz_nul argsPrime();
+zz_nul arg();
 
 #endif

@@ -44,12 +44,22 @@ zz_nul matchToken(zz_int tokenCode, zz_int tokenAttribute)
 	switch (lookahead.code)
 	{
 	case KW_T:
-		// TO_DO: Include the other cases
+	case VID_T:
+	case INL_T:
+	case FPL_T:
+	case STR_T:
+	case LPR_T:
+	case RPR_T:
+	case LBR_T:
+	case RBR_T:
+		// TODO: Include the other cases
 		if (lookahead.attribute.codeType != tokenAttribute)
 			matchFlag = 0;
 	default:
 		if (lookahead.code != tokenCode)
 			matchFlag = 0;
+		else
+			printf("MATCHED TOKEN!!!!\n");
 	}
 	if (matchFlag && lookahead.code == SEOF_T)
 		return;
@@ -107,6 +117,9 @@ zz_nul printError()
 		printf("%s\n", keywordTable[t.attribute.codeType]);
 		break;
 	//case ASS_OP_T:
+	case VID_T:
+		printf("%s\n", t.attribute.vidLexeme);
+		break;
 	case LPR_T:
 	case RPR_T:
 	case LBR_T:
@@ -116,7 +129,7 @@ zz_nul printError()
 	//case EOS_T:
 	//	printf("NA\n");
 	//	break;
-	// TO_DO: Adjust the other cases
+	// TODO: Adjust the other cases
 	default:
 		printf("%s%s%d\n", STR_LANGNAME, ": Scanner error: invalid token code: ", t.code);
 	}
@@ -132,12 +145,19 @@ zz_nul program()
 	switch (lookahead.code)
 	{
 	case LPR_T:
-		if (lookahead.attribute.codeType == STR_T)
+		printf("%i", lookahead.attribute.codeType);
+		matchToken(VID_T, VID_T);
+		lookahead = tokenizer();
+		if (lookahead.code == VID_T)
 		{
-			matchToken(LPR_T, NO_ATTR);
-			dataSession();
-			codeSession();
-			matchToken(RPR_T, NO_ATTR);
+			if (strcmp(lookahead.attribute.vidLexeme, "def") == 0)
+			{
+				lookahead = tokenizer();
+				// This is the start of the program
+				opt_statements();
+				matchToken(RPR_T, NO_ATTR);
+				break;
+			}
 			break;
 		}
 		else
@@ -152,61 +172,17 @@ zz_nul program()
 	printf("%s%s\n", STR_LANGNAME, ": Program parsed");
 }
 
-//TODO: Do we need this?
-
-/*************************************************************
- * dataSession
- * BNF: <dataSession> -> DATA { <opt_varlist_declarations> }
- * FIRST(<program>)= {KW_T (DATA)}.
- ************************************************************/
-zz_nul dataSession()
-{
-	//matchToken(KW_T, DATA);
-	matchToken(LBR_T, NO_ATTR);
-	optVarListDeclarations();
-	matchToken(RBR_T, NO_ATTR);
-	printf("%s%s\n", STR_LANGNAME, ": Code Session parsed");
-}
-
-/*************************************************************
- * Optional Var List Declarations
- * BNF: <opt_varlist_declarations> -> <varlist_declarations> | e
- * FIRST(<opt_varlist_declarations>) = { e, KW_T (INT), KW_T (FLOAT), KW_T (STRING)}.
- ************************************************************/
-zz_nul optVarListDeclarations()
-{
-	// TO_DO: Basic implementation
-	; // Empty
-	printf("%s%s\n", STR_LANGNAME, ": Optional Variable List Declarations parsed");
-}
-
-/*************************************************************
- * codeSession statement
- * BNF: <codeSession> -> CODE { <opt_statements> }
- * FIRST(<codeSession>)= {KW_T (CODE)}.
- ************************************************************/
-zz_nul codeSession()
-{
-	//matchToken(KW_T, CODE);
-	matchToken(LBR_T, NO_ATTR);
-	optionalStatements();
-	matchToken(RBR_T, NO_ATTR);
-	printf("%s%s\n", STR_LANGNAME, ": Code Session parsed");
-}
-
-/* TODO_205: Continue the development (all non-terminal functions) */
-
 /*************************************************************
  * Optional statement
  * BNF: <opt_statements> -> <statements> | ϵ
  * FIRST(<opt_statements>) = { LPR_T, ϵ }
  ************************************************************/
-zz_nul optionalStatements()
-{ // TO_DO: Basic implementation
+zz_nul opt_statements()
+{ // TODO: Basic implementation
 	switch (lookahead.code)
 	{
-	case KW_T:
-		if (lookahead.attribute.codeType == WRITE)
+	case LPR_T:
+		if (lookahead.attribute.codeType == VID_T)
 		{
 			statements();
 			break;
@@ -238,12 +214,12 @@ zz_nul statementsPrime()
 	switch (lookahead.code)
 	{
 	case KW_T:
-		if (lookahead.attribute.codeType == WRITE)
-		{
-			statement();
-			statementsPrime();
-			break;
-		}
+		//if (lookahead.attribute.codeType == WRITE)
+		//{
+		//	statement();
+		//	statementsPrime();
+		//	break;
+		//}
 	default:; //empty string
 	}
 }
@@ -260,9 +236,9 @@ zz_nul statement()
 	case KW_T:
 		switch (lookahead.attribute.codeType)
 		{
-		case WRITE:
-			outputStatement();
-			break;
+		//case WRITE:
+		//	outputStatement();
+		//	break;
 		default:
 			printError();
 		}
@@ -274,35 +250,51 @@ zz_nul statement()
 }
 
 /*************************************************************
- * Output Statement
- * BNF: <output statement> -> WRITE (<output statementPrime>);
- * FIRST(<output statement>) = { KW_T(WRITE) }
+ * Function expression
+ * BNF: <function expr> -> <function identifier> <opt_args>
+ * FIRST(<function expr>) = { VID_T }
  ************************************************************/
-zz_nul outputStatement()
+zz_nul functionExpr()
 {
-	matchToken(STR_T, NO_ATTR);
-	matchToken(LPR_T, NO_ATTR);
-	outputVariableList();
-	matchToken(RPR_T, NO_ATTR);
-	//matchToken(EOS_T, NO_ATTR);
-	printf("%s%s\n", STR_LANGNAME, ": Output statement parsed");
+	// matchToken(VID_T, ???);
 }
 
 /*************************************************************
- * Output Variable List
- * BNF: <opt_variable list> -> <VID_T> | ϵ
- * FIRST(<opt_variable_list>) = { IVID_T, FVID_T, SVID_T, ϵ }
+ * Optional arguments
+ * BNF: <opt_args> -> <args> | ϵ
+ * FIRST(<opt_args>) = { INL_T, FPL_T, STR_T, VID_T, (, ϵ }
  ************************************************************/
-zz_nul outputVariableList()
+zz_nul opt_args()
 {
-	switch (lookahead.code)
-	{
-	case STR_T:
-		matchToken(STR_T, NO_ATTR);
-		break;
-	default:;
-	}
-	printf("%s%s\n", STR_LANGNAME, ": Output variable list parsed");
 }
 
-/* TO_DO: Continue developing the non-terminal functions */
+/*************************************************************
+ * List of arguments
+ * BNF: <args> -> <arg><white space><argsPrime>
+ * FIRST(<args>) = { INL_T, FPL_T, STR_T, VID_T, ( }
+ ************************************************************/
+zz_nul args()
+{
+}
+
+/*************************************************************
+ * List of arguments (prime)
+ * BNF: <argsPrime> -> <arg><white space><argsPrime> | ϵ
+ * FIRST(<argsPrime>) = { INL_T, FPL_T, STR_T, VID_T, (, ϵ }
+ ************************************************************/
+zz_nul argsPrime()
+{
+}
+
+/*************************************************************
+ * Single argument
+ * BNF: <arg> -> <integer literal>
+ *				 | <float literal>
+ *				 | <string literal>
+ *				 | <variable identifier>
+ *				 | (<function expr>)
+ * FIRST(<arg>) = { INL_T, FPL_T, STR_T, VID_T, ( }
+ ************************************************************/
+zz_nul arg()
+{
+}
